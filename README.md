@@ -1,7 +1,17 @@
-# Solana Mobile dApp Scaffold
+# Solami - Mobile Portfolio Manager for Solana
 
-A ready-to-go template Solana React Native dApp with dependencies installed and basic React UI components.
-It provides an interface to connect to locally installed wallet apps (that are MWA-compatible), view your account balance on devnet, and request an airdrop of SOL.
+Solami is the Porfolio Manager for Solana built with love for mobile users.
+While the most dApp are built for web, the mobile experience is cumbersome.
+
+Solami is the game changer for Web3 and the beginning of an epic journey toward Mobile 3.
+
+# What Solami can do
+- Track your assets spread across those great Solana protocols
+- Check health of your borrowings on Marginfi or Kamino and quickly avoid liquidations
+- Stake to the validators who is about to airdrop
+- Long or Short assets via trading protocols straight from the app
+
+Stay tuned for updates!
 
 This React Native dApp is only fully functional on Android.
 
