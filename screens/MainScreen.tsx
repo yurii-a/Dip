@@ -1,5 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import {View, Text,} from 'react-native-ui-lib';
+
 
 import {Section} from '../components/Section';
 import ConnectButton from '../components/ConnectButton';
@@ -13,6 +15,7 @@ import DisconnectButton from '../components/DisconnectButton';
 import RequestAirdropButton from '../components/RequestAirdropButton';
 import SignMessageButton from '../components/SignMessageButton';
 import SignTransactionButton from '../components/SignTransactionButton';
+import ActionSection from '../components/ActionSection';
 
 export default function MainScreen() {
   const {connection} = useConnection();
@@ -39,6 +42,8 @@ export default function MainScreen() {
   return (
     <>
       <View style={styles.mainContainer}>
+        <ActionSection />
+
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {selectedAccount ? (
             <>
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    height: '100%',
+    height: '30%',
   },
   buttonGroup: {
     flexDirection: 'column',

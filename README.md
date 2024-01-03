@@ -18,6 +18,8 @@ This React Native dApp is only fully functional on Android.
 ## Featured Libarires
 - [Mobile Wallet Adapter](https://github.com/solana-mobile/mobile-wallet-adapter/tree/main/js/packages/mobile-wallet-adapter-protocol) for connecting to wallets and signing transactions/messages
 - [web3.js](https://solana-labs.github.io/solana-web3.js/) for constructing transactions and an RPC `connection` client.
+- https://wix.github.io/react-native-ui-lib/docs/getting-started/setup
+- 
 
 <table>
   <tr>

@@ -23,8 +23,8 @@ export function Header() {
       ]}
       imageStyle={styles.logo}>
       <View>
-        <Text style={styles.title}>Solana</Text>
-        <Text style={styles.subtitle}>React Native</Text>
+        <Text style={styles.title}>Solami</Text>
+        <Text style={styles.subtitle}>Portfolio manager</Text>
       </View>
     </ImageBackground>
   );

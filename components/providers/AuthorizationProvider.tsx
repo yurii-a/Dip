@@ -64,8 +64,8 @@ function getPublicKeyFromAddress(address: Base64EncodedAddress): PublicKey {
 }
 
 export const APP_IDENTITY = {
-  name: 'React Native dApp',
-  uri: 'https://solanamobile.com',
+  name: 'Solami dApp',
+  uri: 'https://solami.finance',
   icon: 'favicon.ico',
 };
 
