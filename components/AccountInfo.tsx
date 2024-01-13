@@ -3,6 +3,7 @@ import {LAMPORTS_PER_SOL, PublicKey} from '@solana/web3.js';
 import {StyleSheet, View, Text} from 'react-native';
 import RequestAirdropButton from './RequestAirdropButton';
 import DisconnectButton from './DisconnectButton';
+import GetZetaAccountButton from './GetZetaAccountButton';
 
 interface Account {
   address: string;
@@ -41,12 +42,13 @@ export default function AccountInfo({
         <Text style={styles.walletNameSubtitle}>{selectedAccount.address}</Text>
         <View style={styles.buttonGroup}>
           <DisconnectButton title={'Disconnect'} />
-          <RequestAirdropButton
+          <GetZetaAccountButton />
+          {/* <RequestAirdropButton
             selectedAccount={selectedAccount}
             onAirdropComplete={async (account: Account) =>
               await fetchAndUpdateBalance(account)
             }
-          />
+          /> */}
         </View>
       </View>
     </View>
