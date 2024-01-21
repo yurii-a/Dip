@@ -47,3 +47,4 @@ DerivedData/
 
 # vscode
 .vscode/
+*.code-workspace
