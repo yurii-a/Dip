@@ -13,6 +13,7 @@ import DisconnectButton from '../components/DisconnectButton';
 import RequestAirdropButton from '../components/RequestAirdropButton';
 import SignMessageButton from '../components/SignMessageButton';
 import SignTransactionButton from '../components/SignTransactionButton';
+import GetZetaAccountButton from '../components/zeta/GetMarginAccountButton';
 
 export default function MainScreen() {
   const {connection} = useConnection();
@@ -42,13 +43,13 @@ export default function MainScreen() {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {selectedAccount ? (
             <>
-              <Section title="Sign a transaction">
-                <SignTransactionButton />
+              <Section title="Get Zeta Account">
+                <GetZetaAccountButton />
               </Section>
 
-              <Section title="Sign a message">
-                <SignMessageButton />
-              </Section>
+              {/* <Section title="Sign a transaction">
+                <SignTransactionButton />
+              </Section> */}
             </>
           ) : null}
         </ScrollView>
