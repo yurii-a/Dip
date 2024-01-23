@@ -2,21 +2,12 @@ import React from 'react';
 import {Button, View, Text, StyleSheet} from 'react-native';
 
 import {alertAndLog} from '../../util/alertAndLog';
+import GetZetaAccountButton from './GetZetaAccountButton';
 
-export default function GetZetaAccountButton() {
-  const textStyle = {fontWeight: 'bold'}; // Add the missing import for 'fontWeight' type
-
+export default function ZetaSection() {
   return (
     <>
-      <Button
-        title="Fetch"
-        onPress={async () => {
-          alertAndLog(
-            'Get Account is trigerred',
-            'Reaching here means that the button is working',
-          );
-        }}
-      />
+      <GetZetaAccountButton />
       <Text style={styles.titleText}>Your margin account</Text>
       <Text style={styles.baseText}>
         {'Amount: 1000.00 SOL\n'}

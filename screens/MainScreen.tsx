@@ -13,7 +13,8 @@ import DisconnectButton from '../components/DisconnectButton';
 import RequestAirdropButton from '../components/RequestAirdropButton';
 import SignMessageButton from '../components/SignMessageButton';
 import SignTransactionButton from '../components/SignTransactionButton';
-import GetZetaAccountButton from '../components/zeta/GetMarginAccountButton';
+import GetZetaAccountButton from '../components/zeta/ZetaSection';
+import ZetaSection from '../components/zeta/ZetaSection';
 
 export default function MainScreen() {
   const {connection} = useConnection();
@@ -44,7 +45,7 @@ export default function MainScreen() {
           {selectedAccount ? (
             <>
               <Section title="Get Zeta Account">
-                <GetZetaAccountButton />
+                <ZetaSection />
               </Section>
 
               {/* <Section title="Sign a transaction">
