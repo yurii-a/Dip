@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Button, View, Text, StyleSheet} from 'react-native';
 
 import {alertAndLog} from '../../util/alertAndLog';
 import GetZetaAccountButton from './GetZetaAccountButton';
 
 export default function ZetaSection() {
+  const [account, setAccount] = useState(null);
+
   return (
     <>
-      <GetZetaAccountButton />
+      <GetZetaAccountButton
+        onComplete={(text: String) => {
+          alertAndLog('Account fetched:', text);
+        }}
+      />
       <Text style={styles.titleText}>Your margin account</Text>
       <Text style={styles.baseText}>
         {'Amount: 1000.00 SOL\n'}
