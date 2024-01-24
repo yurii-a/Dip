@@ -4,6 +4,7 @@
  *
  * @format
  */
+const zetaSdkPath = '/Users/yurii/dev/zeta-sdk';
 
 module.exports = {
   transformer: {
@@ -14,4 +15,8 @@ module.exports = {
       },
     }),
   },
+  resolver: {
+    nodeModulesPaths: [zetaSdkPath],
+  },
+  watchFolders: [zetaSdkPath],
 };
