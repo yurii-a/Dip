@@ -4,7 +4,7 @@
  *
  * @format
  */
-const zetaSdkPath = '/Users/yurii/dev/zeta-sdk';
+// const zetaSdkPath = '/Users/yurii/dev/zeta-sdk';
 
 module.exports = {
   transformer: {
@@ -16,7 +16,16 @@ module.exports = {
     }),
   },
   resolver: {
-    nodeModulesPaths: [zetaSdkPath],
+    // nodeModulesPaths: [zetaSdkPath],
+    extraNodeModules: {
+      // crypto: require.resolve('crypto-browserify'),
+      fs: require.resolve('react-native-fs'),
+      os: require.resolve('os-browserify'),
+      path: require.resolve('path-browserify'),
+      // stream: require.resolve('readable-stream'),
+      url: require.resolve('react-native-url-polyfill'),
+      // zlib: require.resolve('browserify-zlib'),
+    },
   },
-  watchFolders: [zetaSdkPath],
+  // watchFolders: [zetaSdkPath],
 };
