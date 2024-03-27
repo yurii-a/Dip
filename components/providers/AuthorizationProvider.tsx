@@ -64,8 +64,8 @@ function getPublicKeyFromAddress(address: Base64EncodedAddress): PublicKey {
 }
 
 export const APP_IDENTITY = {
-  name: 'Panda',
-  uri: 'https://solanamobile.com',
+  name: 'Dip',
+  uri: 'https://getdip.app/',
   icon: 'favicon.ico',
 };
 
