@@ -7,7 +7,8 @@ import React, {
   useContext,
 } from 'react';
 
-export const RPC_ENDPOINT = 'mainnet-beta';
+export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
+export const RPC_CLUSTER = 'Mainnet';
 
 export interface ConnectionProviderProps {
   children: ReactNode;

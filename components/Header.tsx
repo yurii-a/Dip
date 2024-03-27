@@ -23,8 +23,10 @@ export function Header() {
       ]}
       imageStyle={styles.logo}>
       <View>
-        <Text style={styles.title}>Solana</Text>
-        <Text style={styles.subtitle}>React Native</Text>
+        <Text style={styles.title}>Dip</Text>
+        <Text style={styles.subtitle}>
+          Reign your assets, points and open positions
+        </Text>
       </View>
     </ImageBackground>
   );

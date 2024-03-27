@@ -12,7 +12,7 @@ import {toUint8Array} from 'js-base64';
 import {useState, useCallback, useMemo, ReactNode} from 'react';
 import React from 'react';
 
-import {RPC_ENDPOINT} from './ConnectionProvider';
+import {RPC_CLUSTER} from './ConnectionProvider';
 
 export type Account = Readonly<{
   address: Base64EncodedAddress;
@@ -64,7 +64,7 @@ function getPublicKeyFromAddress(address: Base64EncodedAddress): PublicKey {
 }
 
 export const APP_IDENTITY = {
-  name: 'React Native dApp',
+  name: 'Panda',
   uri: 'https://solanamobile.com',
   icon: 'favicon.ico',
 };
@@ -117,7 +117,7 @@ function AuthorizationProvider(props: {children: ReactNode}) {
             identity: APP_IDENTITY,
           })
         : wallet.authorize({
-            cluster: RPC_ENDPOINT,
+            cluster: RPC_CLUSTER,
             identity: APP_IDENTITY,
           }));
       return (await handleAuthorizationResult(authorizationResult))

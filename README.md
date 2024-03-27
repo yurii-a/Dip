@@ -1,11 +1,11 @@
-# Solami - Mobile Portfolio Manager for Solana
+# Dip - Mobile Portfolio Manager for Solana
 
-Solami is the Porfolio Manager for Solana built with love for mobile users.
+Dip is the Porfolio Manager for Solana built with love for mobile users.
 While the most dApp are built for web, the mobile experience is cumbersome.
 
-Solami is the game changer for Web3 and the beginning of an epic journey toward Mobile 3.
+Dip is the game changer for Web3 and the beginning of an epic journey toward Mobile 3.
 
-# What Solami can do
+# What Dip can do
 - Track your assets spread across those great Solana protocols
 - Check health of your borrowings on Marginfi or Kamino and quickly avoid liquidations
 - Stake to the validators who is about to airdrop

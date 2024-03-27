@@ -7,7 +7,7 @@ import {
   constants,
   types,
   utils,
-} from '@zetamarkets/sdk-local';
+} from '@zetamarkets/sdk';
 import React, {useCallback, useMemo, useState} from 'react';
 import {Button} from 'react-native';
 import {alertAndLog} from '../../util/alertAndLog';
@@ -20,6 +20,7 @@ import {
   Web3MobileWallet,
   transact,
 } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
+import {CrossMarginAccountState} from '@zetamarkets/sdk/dist/types';
 
 export default function GetZetaAccountButton({onComplete}) {
   const {connection} = useConnection();
@@ -75,9 +76,7 @@ export default function GetZetaAccountButton({onComplete}) {
     );
 
     await Exchange.load(loadExchangeConfig, zetaWallet);
-
-    const client = await CrossClient.load(connection, zetaWallet, undefined);
-
+    const client = await CrossClient.load(connection, zetaWallet);
     let tradingAsset = constants.Asset.SOL;
 
     // Calculate user account state.
@@ -99,8 +98,8 @@ export default function GetZetaAccountButton({onComplete}) {
       title="Fetch"
       onPress={async () => {
         try {
-          const accountState = await fetchAccount();
-          onComplete(accountState.initialMarginTotal);
+          const accountState: CrossMarginAccountState = await fetchAccount();
+          onComplete(accountState);
         } catch (err: any) {
           alertAndLog(
             'Error during signing',
