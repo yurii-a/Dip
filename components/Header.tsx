@@ -14,7 +14,7 @@ export function Header() {
     <ImageBackground
       accessibilityRole="image"
       testID="new-app-screen-header"
-      source={require('../img/background.png')}
+      source={require('../assets/img/background.png')}
       style={[
         styles.background,
         {
