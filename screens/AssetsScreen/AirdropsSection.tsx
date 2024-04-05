@@ -2,48 +2,51 @@ import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
+import useAssets from '../../store';
 
-interface IAsset {
-  img: any;
-  title: string;
-  pts: string;
-  status: string;
-}
+// interface IAsset {
+//   img: any;
+//   title: string;
+//   pts: string;
+//   status: string;
+// }
 
-const data: IAsset[] = [
-  {
-    img: require(`./../../assets/img/marginFi.png`),
-    title: 'MarginFi',
-    pts: '850',
-    status: 'Claim',
-  },
-  {
-    img: require(`./../../assets/img/parcl.png`),
-    title: 'Parcl',
-    pts: '100',
-    status: 'Start now',
-  },
-  {
-    img: require(`./../../assets/img/drift.png`),
-    title: 'Drift',
-    pts: '',
-    status: 'Start now',
-  },
-  {
-    img: require(`./../../assets/img/wormhole.png`),
-    title: 'Wormhole',
-    pts: '',
-    status: 'Upcoming',
-  },
-  {
-    img: require(`./../../assets/img/etherium.png`),
-    title: 'Jupiter',
-    pts: '',
-    status: 'Claimed',
-  },
-];
+// const data: IAsset[] = [
+//   {
+//     img: require(`./../../assets/img/marginFi.png`),
+//     title: 'MarginFi',
+//     pts: '850',
+//     status: 'Claim',
+//   },
+//   {
+//     img: require(`./../../assets/img/parcl.png`),
+//     title: 'Parcl',
+//     pts: '100',
+//     status: 'Start now',
+//   },
+//   {
+//     img: require(`./../../assets/img/drift.png`),
+//     title: 'Drift',
+//     pts: '',
+//     status: 'Start now',
+//   },
+//   {
+//     img: require(`./../../assets/img/wormhole.png`),
+//     title: 'Wormhole',
+//     pts: '',
+//     status: 'Upcoming',
+//   },
+//   {
+//     img: require(`./../../assets/img/etherium.png`),
+//     title: 'Jupiter',
+//     pts: '',
+//     status: 'Claimed',
+//   },
+// ];
 
 const AirdropsSection = () => {
+  const {solana, assets} = useAssets();
+  const newData = [solana, ...assets];
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -51,21 +54,21 @@ const AirdropsSection = () => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
-        {data.map(item => (
+        {newData.map(item => (
           <TouchableOpacity key={item.title} style={styles.blockItem}>
             <Image
               resizeMode="contain"
-              source={item.img}
+              source={require(`./../../assets/img/etherium.png`)}
               style={styles.image}
             />
             <Text style={styles.label}>{item.title}</Text>
             <View style={styles.prices}>
               <Text style={styles.total}>
-                {item.pts ? item.pts + 'K pts' : ''}
+                {item.balance ? item.balance.toFixed(2) + ' coins' : ''}
               </Text>
               <View style={styles.percents}>
                 <Text style={{color: 'white', textAlign: 'center'}}>
-                  {item.status}
+                  $ {item.totalPrice.toFixed(2)}
                 </Text>
               </View>
             </View>

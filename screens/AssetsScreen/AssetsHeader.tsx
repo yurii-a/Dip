@@ -1,16 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../../styles/Colours';
+import useAssets from '../../store';
 interface IProps {
   navigation: any; // Adjust type according to your navigation prop type
 }
 const AssetsHeader = ({navigation}: IProps) => {
-  const handleMenuClick = (text: string) => {
-    console.log(text);
-  };
+  const {solana, assets} = useAssets();
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (assets) {
+      const totalAssets = assets.reduce((acc, asset) => {
+        return acc + asset.totalPrice;
+      }, 0);
+      setTotal(totalAssets + solana.totalPrice);
+    }
+  }, [assets, solana]);
 
   return (
     <View style={styles.headerContainer}>
@@ -25,19 +34,15 @@ const AssetsHeader = ({navigation}: IProps) => {
         </TouchableOpacity>
         <Text style={styles.navMenuText}>DIP</Text>
       </View>
-      <Text style={styles.balance}>$42,500</Text>
+      <Text style={styles.balance}>${total.toFixed(2)}</Text>
 
       <View style={styles.options}>
-        <TouchableOpacity
-          onPress={() => handleMenuClick('Item 1')}
-          style={styles.optionsItem}>
+        <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
           <AntIcon name="pluscircleo" size={24} color={Colors.darkGray} />
           <Text style={styles.optionLabel}>Top up</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        <TouchableOpacity
-          onPress={() => handleMenuClick('Item 2')}
-          style={styles.optionsItem}>
+        <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
           <MaterialCommunityIcons
             name="line-scan"
             size={24}
@@ -46,9 +51,7 @@ const AssetsHeader = ({navigation}: IProps) => {
           <Text style={styles.optionLabel}>Transfer</Text>
         </TouchableOpacity>
         <View style={styles.line} />
-        <TouchableOpacity
-          onPress={() => handleMenuClick('Item 3')}
-          style={styles.optionsItem}>
+        <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
           <MaterialCommunityIcons
             name="qrcode-plus"
             size={24}

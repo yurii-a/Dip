@@ -23,6 +23,7 @@ export const ConnectionProvider: FC<ConnectionProviderProps> = ({
     () => new Connection(RPC_ENDPOINT, config),
     [config]
   );
+  
   return (
     <ConnectionContext.Provider value={{ connection }}>
       {children}
