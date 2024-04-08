@@ -21,8 +21,8 @@ const AssetsScreen = ({navigation}: IProps) => {
       <AssetsHeader navigation={navigation} />
       <ScrollView style={styles.mainContent}>
         <TotalSection />
-        <AirdropsSection />
         <PositionsSection />
+        <AirdropsSection />
       </ScrollView>
     </SafeAreaView>
   );

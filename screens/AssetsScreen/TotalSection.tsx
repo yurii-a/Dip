@@ -12,22 +12,22 @@ interface IAsset {
 const data: IAsset[] = [
   {
     title: 'Coins',
-    total: '25000',
+    total: '$25,000',
     percents: '+2.02%',
   },
   {
     title: 'NFTS',
-    total: '25000',
+    total: '$2,600',
     percents: '-6.33%',
   },
   {
     title: 'Trading',
-    total: '5500',
-    percents: '+999%',
+    total: '$5,500',
+    percents: '-40%',
   },
   {
     title: 'Lending',
-    total: '6500',
+    total: '$6,500',
     percents: '+0.21%',
   },
 ];
