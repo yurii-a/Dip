@@ -1,3 +1,5 @@
+import {PublicKey} from '@solana/web3.js';
+
 interface Compression {
   asset_hash: string;
   compressed: boolean;
@@ -69,4 +71,16 @@ export interface ICoin {
   balance: number;
   price: number;
   totalPrice: number;
+}
+
+export interface IAccount {
+  address: string;
+  label: string | undefined;
+  publicKey: PublicKey;
+}
+
+export interface IWalletData {
+  accounts: IAccount[];
+  auth_token: string;
+  wallet_uri_base: string;
 }

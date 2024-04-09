@@ -12,8 +12,6 @@ import {toUint8Array} from 'js-base64';
 import {useState, useCallback, useMemo, ReactNode} from 'react';
 import React from 'react';
 
-import {RPC_CLUSTER} from './ConnectionProvider';
-
 export type Account = Readonly<{
   address: Base64EncodedAddress;
   label?: string;
@@ -59,8 +57,7 @@ function getAuthorizationFromAuthorizationResult(
 }
 
 function getPublicKeyFromAddress(address: Base64EncodedAddress): PublicKey {
-  const publicKeyByteArray = toUint8Array(address);
-  return new PublicKey(publicKeyByteArray);
+  return new PublicKey(toUint8Array(address));
 }
 
 export const APP_IDENTITY = {
@@ -117,7 +114,6 @@ function AuthorizationProvider(props: {children: ReactNode}) {
             identity: APP_IDENTITY,
           })
         : wallet.authorize({
-            cluster: RPC_CLUSTER,
             identity: APP_IDENTITY,
           }));
       return (await handleAuthorizationResult(authorizationResult))

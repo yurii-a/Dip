@@ -2,46 +2,31 @@ import {Transaction} from '@solana/web3.js';
 import {
   CrossClient,
   Exchange,
-  Network,
   Wallet as ZetaWallet,
   constants,
-  types,
-  utils,
 } from '@zetamarkets/sdk';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Button} from 'react-native';
 import {alertAndLog} from '../../util/alertAndLog';
-import {
-  useAuthorization,
-  APP_IDENTITY,
-} from '../providers/AuthorizationProvider';
-import {useConnection, RPC_ENDPOINT} from '../providers/ConnectionProvider';
+import {useAuthorization} from '../providers/AuthorizationProvider';
+import {useConnection} from '../providers/ConnectionProvider';
 import {
   Web3MobileWallet,
   transact,
 } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 import {CrossMarginAccountState} from '@zetamarkets/sdk/dist/types';
+import useAssets from '../../store';
 
-export default function GetZetaAccountButton({onComplete}) {
+export default function GetZetaAccountButton() {
   const {connection} = useConnection();
-  const {selectedAccount, authorizeSession} = useAuthorization();
-  const [signingInProgress, setSigningInProgress] = useState(false);
+  const {authorizeSession} = useAuthorization();
+  const {activeAccount} = useAssets()
 
-  const storedAuthToken = null; // dummy placeholder function
+  // const storedAuthToken = null; // dummy placeholder function
   const zetaWallet = useMemo(() => {
     return {
       signTransaction: async (transaction: Transaction) => {
         return transact(async (wallet: Web3MobileWallet) => {
-          const authorizationResult = await (storedAuthToken
-            ? wallet.reauthorize({
-                auth_token: storedAuthToken,
-                identity: APP_IDENTITY,
-              })
-            : wallet.authorize({
-                cluster: RPC_ENDPOINT,
-                identity: APP_IDENTITY,
-              }));
-
           const signedTransactions = await wallet.signTransactions({
             transactions: [transaction],
           });
@@ -58,31 +43,19 @@ export default function GetZetaAccountButton({onComplete}) {
         });
       },
       get publicKey() {
-        return selectedAccount!.publicKey;
+        return activeAccount!.publicKey;
       },
     } as ZetaWallet;
-  }, [authorizeSession, selectedAccount]);
+  }, [authorizeSession, activeAccount]);
 
   const fetchAccount = useCallback(async () => {
-    console.log('ZetaWallet Key: ');
-    console.log(zetaWallet.publicKey);
 
-    const loadExchangeConfig = types.defaultLoadExchangeConfig(
-      Network.MAINNET,
-      connection,
-      utils.defaultCommitment(),
-      0,
-      true,
-    );
-
-    await Exchange.load(loadExchangeConfig, zetaWallet);
+    console.log('work');
     const client = await CrossClient.load(connection, zetaWallet);
+    console.log('work2');
+
     let tradingAsset = constants.Asset.SOL;
 
-    // Calculate user account state.
-    // let accountState = client.getAccountState();
-
-    // View our position
     console.log('Positions: ');
     console.log(client.getPositions(tradingAsset));
 
@@ -99,7 +72,7 @@ export default function GetZetaAccountButton({onComplete}) {
       onPress={async () => {
         try {
           const accountState: CrossMarginAccountState = await fetchAccount();
-          onComplete(accountState);
+          console.log(accountState);
         } catch (err: any) {
           alertAndLog(
             'Error during signing',

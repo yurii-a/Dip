@@ -5,10 +5,8 @@ import useAssets from '../../store';
 //   import {useConnection} from '../../components/providers/ConnectionProvider';
 
 const GetInfo = () => {
-  const {assets, getAssets} = useAssets();
-
+  const {getAssets} = useAssets();
   getAssets();
-  console.log(assets, 'assetsssss');
 
   return (
     <View>

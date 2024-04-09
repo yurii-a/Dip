@@ -4,46 +4,6 @@ import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
 
-// interface IAsset {
-//   img: any;
-//   title: string;
-//   pts: string;
-//   status: string;
-// }
-
-// const data: IAsset[] = [
-//   {
-//     img: require(`./../../assets/img/marginFi.png`),
-//     title: 'MarginFi',
-//     pts: '850',
-//     status: 'Claim',
-//   },
-//   {
-//     img: require(`./../../assets/img/parcl.png`),
-//     title: 'Parcl',
-//     pts: '100',
-//     status: 'Start now',
-//   },
-//   {
-//     img: require(`./../../assets/img/drift.png`),
-//     title: 'Drift',
-//     pts: '',
-//     status: 'Start now',
-//   },
-//   {
-//     img: require(`./../../assets/img/wormhole.png`),
-//     title: 'Wormhole',
-//     pts: '',
-//     status: 'Upcoming',
-//   },
-//   {
-//     img: require(`./../../assets/img/etherium.png`),
-//     title: 'Jupiter',
-//     pts: '',
-//     status: 'Claimed',
-//   },
-// ];
-
 const AirdropsSection = () => {
   const {solana, assets} = useAssets();
   const newData = [solana, ...assets];

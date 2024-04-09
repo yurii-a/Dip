@@ -6,12 +6,14 @@ import TotalSection from './TotalSection';
 import AirdropsSection from './AirdropsSection';
 import PositionsSection from './PositionsSection';
 import useAssets from '../../store';
+// import GetZetaAccountButton from '../../components/zeta/GetZetaAccountButton';
 
 interface IProps {
   navigation: any;
 }
 const AssetsScreen = ({navigation}: IProps) => {
   const {getAssets} = useAssets();
+
   useEffect(() => {
     getAssets();
   }, [getAssets]);
@@ -24,6 +26,7 @@ const AssetsScreen = ({navigation}: IProps) => {
         <AirdropsSection />
         <PositionsSection />
       </ScrollView>
+      {/* <GetZetaAccountButton /> */}
     </SafeAreaView>
   );
 };
