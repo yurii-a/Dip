@@ -1,14 +1,14 @@
-import { Connection, type ConnectionConfig } from "@solana/web3.js";
+import {Connection, type ConnectionConfig} from '@solana/web3.js';
 import React, {
   type FC,
   type ReactNode,
   useMemo,
   createContext,
   useContext,
-} from "react";
+} from 'react';
 
-export const RPC_ENDPOINT = "https://rpc-proxy.solami.workers.dev/";
-export const RPC_CLUSTER = "Mainnet";
+export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
+export const RPC_CLUSTER = 'Mainnet';
 
 export interface ConnectionProviderProps {
   children: ReactNode;
@@ -17,15 +17,14 @@ export interface ConnectionProviderProps {
 
 export const ConnectionProvider: FC<ConnectionProviderProps> = ({
   children,
-  config = { commitment: "confirmed" },
+  config = {commitment: 'confirmed'},
 }) => {
   const connection = useMemo(
     () => new Connection(RPC_ENDPOINT, config),
-    [config]
+    [config],
   );
-  
   return (
-    <ConnectionContext.Provider value={{ connection }}>
+    <ConnectionContext.Provider value={{connection}}>
       {children}
     </ConnectionContext.Provider>
   );
@@ -36,7 +35,7 @@ export interface ConnectionContextState {
 }
 
 export const ConnectionContext = createContext<ConnectionContextState>(
-  {} as ConnectionContextState
+  {} as ConnectionContextState,
 );
 
 export function useConnection(): ConnectionContextState {

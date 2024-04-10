@@ -6,18 +6,21 @@ import TotalSection from './TotalSection';
 import AirdropsSection from './AirdropsSection';
 import PositionsSection from './PositionsSection';
 import useAssets from '../../store';
-// import GetZetaAccountButton from '../../components/zeta/GetZetaAccountButton';
+import {useAuthorization} from '../../components/providers/AuthorizationProvider';
 
 interface IProps {
   navigation: any;
 }
 const AssetsScreen = ({navigation}: IProps) => {
-  const {getAssets} = useAssets();
+  const {assets, positions, getAssets, getPositions} = useAssets();
+  const {authorizeSession} = useAuthorization();
 
   useEffect(() => {
     getAssets();
-  }, [getAssets]);
-
+    getPositions(authorizeSession);
+  }, [authorizeSession, getAssets, getPositions]);
+  console.log(assets, 'assets');
+  console.log(positions, 'positions');
   return (
     <SafeAreaView style={styles.mainContainer}>
       <AssetsHeader navigation={navigation} />
@@ -26,7 +29,6 @@ const AssetsScreen = ({navigation}: IProps) => {
         <AirdropsSection />
         <PositionsSection />
       </ScrollView>
-      {/* <GetZetaAccountButton /> */}
     </SafeAreaView>
   );
 };

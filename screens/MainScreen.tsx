@@ -9,7 +9,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {IAccount} from '../store/interfaces';
 import {PublicKey} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
-import GetZetaAccountButton from '../components/zeta/GetZetaAccountButton';
 interface IProps {
   navigation: any;
 }
@@ -63,7 +62,6 @@ export default function MainScreen({navigation}: IProps) {
               </Text>
               <Text style={styles.mainBalance}>{balance?.toFixed(2)} SOL</Text>
             </View>
-            <GetZetaAccountButton />
             <Button
               title="ASSETS"
               onPress={() => navigation.navigate('assets')}
