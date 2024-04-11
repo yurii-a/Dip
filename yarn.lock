@@ -1780,19 +1780,19 @@
   dependencies:
     "@sinonjs/commons" "^2.0.0"
 
-"@solana-mobile/mobile-wallet-adapter-protocol-web3js@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@solana-mobile/mobile-wallet-adapter-protocol-web3js/-/mobile-wallet-adapter-protocol-web3js-2.1.0.tgz"
-  integrity sha512-ya4f7nk+POzM4UID+9Vrot9yol+ZWjq6ctS8qChLefbuN8UO2klJHA3QkHjKyacO4ZzLjagtL1qYC0oBhw2FoQ==
+"@solana-mobile/mobile-wallet-adapter-protocol-web3js@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/@solana-mobile/mobile-wallet-adapter-protocol-web3js/-/mobile-wallet-adapter-protocol-web3js-2.1.2.tgz"
+  integrity sha512-uA6tbP/JvBCdGSwty3rNM8a0qpoHPEV+Qj234aw4XMisS++TSN8R79bclT4hLvOsg+m04on1MOkMM3oPXlQo9A==
   dependencies:
-    "@solana-mobile/mobile-wallet-adapter-protocol" "^2.1.0"
+    "@solana-mobile/mobile-wallet-adapter-protocol" "^2.1.2"
     bs58 "^5.0.0"
     js-base64 "^3.7.5"
 
-"@solana-mobile/mobile-wallet-adapter-protocol@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@solana-mobile/mobile-wallet-adapter-protocol/-/mobile-wallet-adapter-protocol-2.1.0.tgz"
-  integrity sha512-mUS/3gOgRqbuTZ35h6OtwypmcVuekMPywodso9C90qZf7mTqTrAO+duAfGk3B9Qwnl71GrezzndIvFrie8JeFQ==
+"@solana-mobile/mobile-wallet-adapter-protocol@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/@solana-mobile/mobile-wallet-adapter-protocol/-/mobile-wallet-adapter-protocol-2.1.2.tgz"
+  integrity sha512-z7LPeWzdEUoavU5P1PSbtxLTNE/MB6ACgaIPPAMjRdEk/jUvunquWKmbOX4vkFD6QbD98ykc4NZOt5iki7Z6hw==
   dependencies:
     "@solana/wallet-standard" "^1.1.2"
     "@solana/wallet-standard-util" "^1.1.1"
@@ -1907,7 +1907,7 @@
     "@solana/wallet-standard-core" "^1.1.1"
     "@solana/wallet-standard-wallet-adapter" "^1.1.2"
 
-"@solana/web3.js@^1.12.0", "@solana/web3.js@^1.58.0", "@solana/web3.js@^1.68.0", "@solana/web3.js@^1.77.3", "@solana/web3.js@^1.87.3", "@solana/web3.js@^1.89.1":
+"@solana/web3.js@^1.12.0", "@solana/web3.js@^1.58.0", "@solana/web3.js@^1.68.0", "@solana/web3.js@^1.77.3", "@solana/web3.js@^1.87.3", "@solana/web3.js@^1.91.4":
   version "1.91.4"
   resolved "https://registry.npmjs.org/@solana/web3.js/-/web3.js-1.91.4.tgz"
   integrity sha512-zconqecIcBqEF6JiM4xYF865Xc4aas+iWK5qnu7nwKPq9ilRYcn+2GiwpYXqUqqBUe0XCO17w18KO0F8h+QATg==
@@ -2278,10 +2278,10 @@
     superstruct "^0.15.4"
     toml "^3.0.0"
 
-"@zetamarkets/sdk@^1.18.5":
-  version "1.18.5"
-  resolved "https://registry.npmjs.org/@zetamarkets/sdk/-/sdk-1.18.5.tgz"
-  integrity sha512-wprHFsIErNNL3/s1pn+lZrbPrrpVtn5Tuzsy8737+V7sAnvhrIp9pdvulh6jHbR0L2HNcYtMsRQRky67XQ9yyQ==
+"@zetamarkets/sdk@^1.26.3":
+  version "1.26.3"
+  resolved "https://registry.npmjs.org/@zetamarkets/sdk/-/sdk-1.26.3.tgz"
+  integrity sha512-gH2s21D3yF4BANL5xiG+H8JHrPIKOsZEltpis9Q9tH/jziK0FF+E2jxgz6G1TUvddL3FNKbe+GhqNfkX2IaJlA==
   dependencies:
     "@solana/buffer-layout" "4.0.0"
     "@solana/spl-token" "0.1.6"
@@ -2291,6 +2291,7 @@
     cross-fetch "^3.1.6"
     lodash "^4.17.21"
     lodash.clonedeep "^4.5.0"
+    obscenity "0.2.0"
     zeta-solana-web3 "1.87.7"
 
 abort-controller@^3.0.0:
@@ -6396,6 +6397,11 @@ object.values@^1.1.6:
     call-bind "^1.0.2"
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
+
+obscenity@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/obscenity/-/obscenity-0.2.0.tgz"
+  integrity sha512-eYe8r9hqJk5dEMZkLtWlGlwGxKYO6xA/yEOzd8MGSG3vzn8hAgo6MUZ9dirA3kPAfy/1d1jEOkCUpIU1nGI1EQ==
 
 on-finished@~2.3.0:
   version "2.3.0"

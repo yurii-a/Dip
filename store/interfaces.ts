@@ -1,3 +1,4 @@
+import {AuthToken} from '@solana-mobile/mobile-wallet-adapter-protocol';
 import {PublicKey} from '@solana/web3.js';
 
 interface Compression {
@@ -13,10 +14,10 @@ interface Compression {
 
 interface Content {
   $schema: string;
-  files: any[]; // This will depend on the structure of files array
+  files: any[];
   json_uri: string;
-  links: any; // This will depend on the structure of links object
-  metadata: any; // This will depend on the structure of metadata object
+  links: any;
+  metadata: any;
 }
 
 interface Ownership {
@@ -33,26 +34,26 @@ interface Royalty {
   percent: number;
   primary_sale_happened: boolean;
   royalty_model: string;
-  target: any; // This will depend on the structure of target object
+  target: any;
 }
 
 interface TokenInfo {
   associated_token_address: string;
   balance: number;
   decimals: number;
-  price_info: any; // This will depend on the structure of price_info object
+  price_info: any;
   supply: number;
   symbol: string;
   token_program: string;
 }
 
 export interface IResultItem {
-  authorities: any[]; // This will depend on the structure of authorities array
+  authorities: any[];
   burnt: boolean;
   compression: Compression;
   content: Content;
-  creators: any[]; // This will depend on the structure of creators array
-  grouping: any[]; // This will depend on the structure of grouping array
+  creators: any[];
+  grouping: any[];
   id: string;
   interface: string;
   mutable: boolean;
@@ -84,3 +85,9 @@ export interface IWalletData {
   auth_token: string;
   wallet_uri_base: string;
 }
+
+export type Authorization = {
+  accounts: IAccount[];
+  authToken: AuthToken;
+  activeAccount: IAccount | null;
+};

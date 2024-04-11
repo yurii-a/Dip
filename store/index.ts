@@ -2,7 +2,13 @@ import {create} from 'zustand';
 import {IAccount, ICoin, IWalletData} from './interfaces';
 import {types} from '@zetamarkets/sdk';
 
-import {getAssets, getPositions, getWallet} from './services';
+import {
+  connectZetaMarkets,
+  getAssets,
+  getPositions,
+  getWallet,
+} from './services';
+import {Connection} from '@solana/web3.js';
 
 export const APP_IDENTITY = {
   name: 'Dip',
@@ -17,11 +23,14 @@ interface IStore {
   solana: ICoin;
   assets: ICoin[];
   positions: types.Position[];
+  connection: Connection;
+  isZetaConnected: boolean;
   connectWallet: () => void;
   setActiveAccount: (account: IAccount) => void;
   setPositions: (positions: types.Position[]) => void;
   getAssets: () => void;
-  getPositions: (callback: any) => void;
+  connectZetaMarkets: () => void;
+  getPositions: () => void;
 }
 
 const useAssets = create<IStore>((set, get) => ({
@@ -39,9 +48,17 @@ const useAssets = create<IStore>((set, get) => ({
   },
   assets: [],
   positions: [],
+  connection: new Connection(RPC_ENDPOINT, {commitment: 'confirmed'}),
+  isZetaConnected: false,
   connectWallet: async () => {
     const wallet = await getWallet();
-    set(state => ({...state, wallet: wallet}));
+    set(state => ({
+      ...state,
+      wallet: wallet,
+      activeAccount: wallet.accounts[0],
+    }));
+    const res = await connectZetaMarkets(wallet.accounts[0]);
+    set(state => ({...state, isZetaConnected: res}));
   },
   setActiveAccount: (account: IAccount) => {
     set(state => ({...state, activeAccount: account}));
@@ -54,9 +71,14 @@ const useAssets = create<IStore>((set, get) => ({
   setPositions: positions => {
     set(state => ({...state, positions: positions}));
   },
-  getPositions: async (callback: any) => {
-    const activeAccaunt = await get().activeAccount;
-    const positions = await getPositions(activeAccaunt, callback);
+  connectZetaMarkets: async () => {
+    const account = get().activeAccount;
+    const res = await connectZetaMarkets(account);
+    set(state => ({...state, isZetaConnected: res}));
+  },
+  getPositions: async () => {
+    const account = get().activeAccount;
+    const positions = await getPositions(account);
     set(state => ({...state, positions: positions}));
   },
 }));

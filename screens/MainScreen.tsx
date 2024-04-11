@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-import {useConnection} from '../components/providers/ConnectionProvider';
 import {Header} from '../components/Header';
 import Colors from '../styles/Colours';
 import useAssets from '../store';
@@ -13,9 +12,16 @@ interface IProps {
   navigation: any;
 }
 export default function MainScreen({navigation}: IProps) {
-  const {connection} = useConnection();
   const [balance, setBalance] = useState<number | null>(null);
-  const {connectWallet, wallet, activeAccount, setActiveAccount} = useAssets();
+  const {
+    wallet,
+    isZetaConnected,
+    connection,
+    activeAccount,
+    connectWallet,
+    setActiveAccount,
+    connectZetaMarkets,
+  } = useAssets();
 
   const fetchAndUpdateBalance = useCallback(
     async (account: IAccount) => {
@@ -31,6 +37,13 @@ export default function MainScreen({navigation}: IProps) {
     }
     fetchAndUpdateBalance(activeAccount);
   }, [fetchAndUpdateBalance, activeAccount]);
+
+  useEffect(() => {
+    if (!isZetaConnected) {
+      connectZetaMarkets();
+    }
+  }, [connectZetaMarkets, isZetaConnected]);
+
   return (
     <>
       <Header />
@@ -62,6 +75,11 @@ export default function MainScreen({navigation}: IProps) {
               </Text>
               <Text style={styles.mainBalance}>{balance?.toFixed(2)} SOL</Text>
             </View>
+            {/* {activeAccount && <Button
+              title="fetch"
+              onPress={() => connectZetaMarkets(activeAccount)}
+              />
+            )} */}
             <Button
               title="ASSETS"
               onPress={() => navigation.navigate('assets')}

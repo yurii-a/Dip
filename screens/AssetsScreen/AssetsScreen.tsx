@@ -6,19 +6,16 @@ import TotalSection from './TotalSection';
 import AirdropsSection from './AirdropsSection';
 import PositionsSection from './PositionsSection';
 import useAssets from '../../store';
-import {useAuthorization} from '../../components/providers/AuthorizationProvider';
 
 interface IProps {
   navigation: any;
 }
 const AssetsScreen = ({navigation}: IProps) => {
   const {assets, positions, getAssets, getPositions} = useAssets();
-  const {authorizeSession} = useAuthorization();
-
   useEffect(() => {
     getAssets();
-    getPositions(authorizeSession);
-  }, [authorizeSession, getAssets, getPositions]);
+    getPositions();
+  }, [getAssets, getPositions]);
   console.log(assets, 'assets');
   console.log(positions, 'positions');
   return (

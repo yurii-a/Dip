@@ -1,4 +1,4 @@
-import {Connection, PublicKey, Transaction} from '@solana/web3.js';
+import {PublicKey, Transaction} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
 import {
   CrossClient,
@@ -6,7 +6,9 @@ import {
   Network,
   Wallet as ZetaWallet,
   constants,
+  // events,
   types,
+  // assets,
   utils,
 } from '@zetamarkets/sdk';
 import {
@@ -14,14 +16,16 @@ import {
   Web3MobileWallet,
 } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
 import {IAccount, IResultItem} from './interfaces';
-
+import {useAuthorizationStore} from './useAuthorizationStore';
+import useAssets from './index';
 export const APP_IDENTITY = {
   name: 'Dip',
   uri: 'https://getdip.app/',
   icon: 'favicon.ico',
 };
 export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
-
+const {authorizeSession} = useAuthorizationStore.getState();
+const {connection} = useAssets.getState();
 //________________________________FUNCTIONS________________________________________________________________
 export async function getWallet() {
   const result = await transact(async (wallet: Web3MobileWallet) => {
@@ -91,11 +95,7 @@ export async function getAssets() {
   return {assets: formattedResults, solana: solBalance};
 }
 
-export async function getPositions(
-  activeAccount: IAccount | null,
-  authorizeSession: (arg0: Web3MobileWallet) => any,
-) {
-  const connection = new Connection(RPC_ENDPOINT, {commitment: 'confirmed'});
+export async function getZetaWallet(activeAccount: IAccount | null) {
   const zetaWallet = {
     signTransaction: async (transaction: Transaction) => {
       return transact(async (wallet: Web3MobileWallet) => {
@@ -118,19 +118,45 @@ export async function getPositions(
       return activeAccount!.publicKey;
     },
   } as ZetaWallet;
+  return zetaWallet;
+}
 
+export async function connectZetaMarkets(activeAccount: IAccount | null) {
+  const zetaWallet = await getZetaWallet(activeAccount);
+  // async function exchangeCallback(
+  //   asset: constants.Asset,
+  //   _eventType: events.EventType,
+  //   _data: any,
+  // ) {}
   const loadExchangeConfig = types.defaultLoadExchangeConfig(
     Network.MAINNET,
     connection,
     utils.defaultCommitment(),
-    10,
-    true,
+    100,
+    false,
   );
-
-  await Exchange.load(loadExchangeConfig, zetaWallet);
+  try {
+    await Exchange.load(loadExchangeConfig, zetaWallet);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+export async function getPositions(activeAccount: IAccount | null) {
+  const zetaWallet = await getZetaWallet(activeAccount);
   const client = await CrossClient.load(connection, zetaWallet);
-
   await client.updateState();
-  const positions = client.getPositions(constants.Asset.SOL);
+  const assetValues = Object.values(constants.Asset);
+
+  const positionPromises = assetValues.map(async assetValue => {
+    const positions = await client.getPositions(assetValue);
+    return positions;
+  });
+
+  const res = await Promise.all(positionPromises);
+  const positions = res
+    .filter(item => item !== undefined && item.length > 0)
+    .flat();
+
   return positions;
 }
