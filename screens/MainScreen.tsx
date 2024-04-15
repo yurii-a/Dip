@@ -97,12 +97,7 @@ export default function MainScreen({navigation}: {navigation: any}) {
               />
             </>
           )}
-        {/* {wallet && (
-          <Button
-            title="ASSETS"
-            onPress={() => navigation.navigate('assets')}
-          />
-        )} */}
+
         {!wallet && (
           <View style={{marginTop: 'auto'}}>
             <Button title="Connect wallet" onPress={connectWallet} />
