@@ -1,5 +1,6 @@
 import {PublicKey, Transaction} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
+import axios from 'axios';
 import {
   CrossClient,
   Exchange,
@@ -34,6 +35,7 @@ export async function getWallet() {
     });
     return authorizationResult;
   });
+
   const wallet = {
     ...result,
     accounts: result.accounts.map(item => {
@@ -75,7 +77,6 @@ export async function getAssets(): Promise<{assets: IAsset[]; solana: IAsset}> {
     }),
   });
   const data = await response.json();
-  console.log(data.result.items[0], 'results');
   const formattedResults = data.result.items.map((item: IResultItem) => {
     return {
       id: item.id,
@@ -127,13 +128,9 @@ export async function getZetaWallet(activeAccount: IAccount | null) {
   return zetaWallet;
 }
 
-export async function connectZetaMarkets(activeAccount: IAccount | null) {
+export async function connectZetaMarkets() {
   const zetaWallet = await getZetaWallet(activeAccount);
-  // async function exchangeCallback(
-  //   asset: constants.Asset,
-  //   _eventType: events.EventType,
-  //   _data: any,
-  // ) {}
+
   const loadExchangeConfig = types.defaultLoadExchangeConfig(
     Network.MAINNET,
     connection,
@@ -173,4 +170,40 @@ export async function getSolanaBalance(
   const publicKey = new PublicKey(toUint8Array(account.address));
   const fetchedBalance = await connection.getBalance(publicKey);
   return fetchedBalance / 1e9;
+}
+
+export async function getAllocationsAirdrop(address: string) {
+  const url = `https://api.hubbleprotocol.io/v2/airdrop/users/${address}/allocations?source=Season1`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        accept: 'application/json',
+        'user-agent': 'Mozilla/5.0',
+      },
+    });
+    console.log(response.data, 'responce xxxxxxxxx');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching airdrop allocations:', error);
+    // Handle error appropriately
+    throw error;
+  }
+}
+export async function getPointsAirdrop(address: string) {
+  const url = `https://parcl-api.com/v1/points/balance?user=${address}`;
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        authority: 'parcl-api.com',
+        origin: 'https://app.parcl.co',
+      },
+    });
+
+    console.log(response.data, 'responce xxxxxxxxx2');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user points balance:', error);
+    throw error;
+  }
 }

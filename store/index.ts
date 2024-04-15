@@ -35,6 +35,7 @@ interface IStore {
   getAssets: () => void;
   connectZetaMarkets: () => void;
   getPositions: () => void;
+  getAirdrops: () => void;
   getSolanaBalance: () => void;
 }
 
@@ -64,6 +65,7 @@ const useAssets = create<IStore>((set, get) => ({
     set(state => ({
       ...state,
       wallet: wallet,
+      activeAccount: wallet.accounts[0],
     }));
   },
   setActiveAccount: account => {
@@ -83,14 +85,14 @@ const useAssets = create<IStore>((set, get) => ({
       totalBalance: totalAssets,
     }));
   },
+  getAirdrops: async () => {},
   getSolanaBalance: async () => {
     const account = get().activeAccount;
     const balance = await getSolanaBalance(account);
     set(state => ({...state, solanaBalance: balance}));
   },
   connectZetaMarkets: async () => {
-    const account = get().activeAccount;
-    const res = await connectZetaMarkets(account);
+    const res = await connectZetaMarkets();
     set(state => ({...state, isZetaConnected: res}));
   },
 

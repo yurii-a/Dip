@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import Colors from '../../styles/Colours';
 import AssetsHeader from './AssetsHeader';
 import TotalSection from './TotalSection';
@@ -7,7 +7,7 @@ import AirdropsSection from './AirdropsSection';
 import PositionsSection from './PositionsSection';
 import useAssets from '../../store';
 
-const AssetsScreen = () => {
+const AssetsScreen = (navigation: any) => {
   const {getAssets, getPositions} = useAssets();
 
   useEffect(() => {
@@ -18,11 +18,11 @@ const AssetsScreen = () => {
   return (
     <SafeAreaView style={styles.mainContainer}>
       <AssetsHeader />
-      <ScrollView style={styles.mainContent}>
-        <TotalSection />
+      <View style={styles.mainContent}>
+        <TotalSection navigation={navigation} />
         <AirdropsSection />
         <PositionsSection />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

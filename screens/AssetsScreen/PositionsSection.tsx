@@ -1,45 +1,32 @@
-import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import React, {useEffect} from 'react';
+import {Text, StyleSheet, View, TouchableOpacity, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
-
-interface IAsset {
-  img: any;
-  title: string;
-  margin: string;
-  positionType: string;
-  balance: string;
-  position: string;
-}
-
-const data: IAsset[] = [
-  {
-    img: require(`./../../assets/img/sol.png`),
-    title: 'SOL',
-    margin: '100',
-    positionType: 'LONG',
-    balance: '5234',
-    position: '5000',
-  },
-  {
-    img: require(`./../../assets/img/drift.png`),
-    title: 'NYC Real Estate',
-    margin: '8',
-    positionType: 'LONG',
-    balance: '300',
-    position: '10',
-  },
-  {
-    img: require(`./../../assets/img/etherium.png`),
-    title: 'ETH',
-    margin: '5',
-    positionType: 'SHORT',
-    balance: '200',
-    position: '530',
-  },
-];
+import useAssets from '../../store';
 
 const PositionsSection = () => {
+  const {
+    positions,
+    isZetaConnected,
+    setIsZetaConnected,
+    connectZetaMarkets,
+    getPositions,
+  } = useAssets();
+
+  useEffect(() => {
+    if (isZetaConnected === '') {
+      setIsZetaConnected('pending');
+      connectZetaMarkets();
+    } else if (isZetaConnected === 'success') {
+      getPositions();
+    }
+  }, [
+    positions,
+    connectZetaMarkets,
+    isZetaConnected,
+    setIsZetaConnected,
+    getPositions,
+  ]);
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -47,27 +34,28 @@ const PositionsSection = () => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
-        {data.map(item => (
-          <TouchableOpacity key={item.title} style={styles.blockItem}>
-            <Image
-              resizeMode="contain"
-              source={item.img}
-              style={styles.image}
-            />
-            <View>
-              <Text style={styles.name}>
-                {item.margin}X {item.positionType}
-              </Text>
-              <Text style={styles.label}>
-                {item.position} {item.title}
-              </Text>
-            </View>
-            <View style={styles.open}>
-              <Text style={styles.total}>+${item.balance}</Text>
-              <Icon name="chevron-right" size={20} color={Colors.titleText} />
-            </View>
-          </TouchableOpacity>
-        ))}
+        <FlatList
+          data={positions}
+          renderItem={({item}) => (
+            <TouchableOpacity key={item.asset} style={styles.blockItem}>
+              {/* <Image
+                resizeMode="contain"
+                source={{uri: item.img}}
+                style={styles.image}
+              /> */}
+              <View>
+                <Text style={styles.name}>{item.asset} </Text>
+                <Text style={styles.label}>
+                  {item.costOfTrades} cost of trades
+                </Text>
+              </View>
+              <View style={styles.open}>
+                <Text style={styles.total}>+${item.size} size</Text>
+                <Icon name="chevron-right" size={20} color={Colors.titleText} />
+              </View>
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </View>
   );

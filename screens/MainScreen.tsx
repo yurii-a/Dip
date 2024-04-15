@@ -1,102 +1,69 @@
 import React, {useEffect} from 'react';
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
-import {Header} from '../components/Header';
+import {
+  Button,
+  // FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+} from 'react-native';
 import Colors from '../styles/Colours';
 import useAssets from '../store';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {getAllocationsAirdrop, getPointsAirdrop} from '../store/services';
 export default function MainScreen({navigation}: {navigation: any}) {
-  const {
-    wallet,
-    solanaBalance,
-    connection,
-    activeAccount,
-    connectWallet,
-    setActiveAccount,
-    setIsZetaConnected,
-    connectZetaMarkets,
-    getSolanaBalance,
-  } = useAssets();
+  const {activeAccount, connectWallet, setIsZetaConnected, getSolanaBalance} =
+    useAssets();
 
   useEffect(() => {
     if (activeAccount) {
       setIsZetaConnected('pending');
-      // connectZetaMarkets();
       getSolanaBalance();
+      getAllocationsAirdrop(String(activeAccount.publicKey));
+      getPointsAirdrop(String(activeAccount.publicKey));
+      navigation.navigate('assets');
     }
-  }, [activeAccount, connectZetaMarkets, getSolanaBalance, setIsZetaConnected]);
+  }, [activeAccount, getSolanaBalance, navigation, setIsZetaConnected]);
 
   return (
     <>
-      <Header />
       <View style={styles.mainContainer}>
-        {wallet && !activeAccount && (
-          <View style={styles.wallets}>
-            <Text style={styles.accountsTitle}>Accounts: </Text>
-            {wallet && (
-              <FlatList
-                data={wallet.accounts}
-                renderItem={({item}) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setActiveAccount(item);
-                    }}>
-                    <View style={styles.address}>
-                      <Icon name="link" size={20} />
-                      <Text style={styles.addressText}>{item.address}</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
-              />
-            )}
-          </View>
-        )}
-        {/* {isZetaConnected === 'pending' && ( //When we waiting zeta Markets Connecting
-          <View style={{flex: 1, justifyContent: 'center'}}>
-            <ActivityIndicator color={Colors.purple} />
-          </View>
-        )}
-        {isZetaConnected === 'failure' && ( //When zeta markets connecting failed
-          <View>
-            <Text style={styles.successTitle}> reject </Text>
-            <Button
-              title="Reconnect"
-              onPress={() => {
-                setIsZetaConnected('pending');
-                connectZetaMarkets();
-              }}
-            />
-          </View>
-        )} */}
-        {activeAccount && ( //When zeta markets connecting success
-          <>
-            <View style={styles.success}>
-              <Text style={styles.successTitle}>
-                Success!!! Wallet connected!!
-              </Text>
-              <Text style={styles.mainBalance}>
-                {solanaBalance?.toFixed(2)} SOL
-              </Text>
-            </View>
-            <Button
-              title="ASSETS"
-              onPress={() => navigation.navigate('assets')}
-            />
-          </>
-        )}
-
-        {!wallet && (
-          <View style={{marginTop: 'auto'}}>
-            <Button title="Connect wallet" onPress={connectWallet} />
-          </View>
-        )}
-        <Text>Selected cluster: {connection.rpcEndpoint}</Text>
+        <View style={styles.logo}>
+          <Text style={styles.title}>Get started with DIP</Text>
+          <Image
+            resizeMode={'contain'}
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+              width: '80%',
+              height: 300,
+              alignSelf: 'center',
+              marginBottom: 100,
+            }}
+            source={require('../assets/img/intro_bg.png')}
+          />
+        </View>
+        <View>
+          <Text style={styles.inputLabel}>Enter your wallet address</Text>
+          <TextInput style={styles.input} />
+          <Text style={styles.inputLabel}>or</Text>
+          <Button title="Connect wallet" onPress={connectWallet} />
+        </View>
       </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  logo: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  title: {
+    color: '#fff',
+    fontSize: 40,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
   address: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -139,7 +106,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   mainContainer: {
-    height: '100%',
+    backgroundColor: Colors.purple,
+    justifyContent: 'space-between',
     padding: 16,
     flex: 1,
   },
@@ -149,5 +117,19 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'column',
     paddingVertical: 4,
+  },
+  inputLabel: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  input: {
+    backgroundColor: '#ffffff',
+    color: Colors.purpleDark,
+    opacity: 0.3,
+    fontSize: 12,
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });
