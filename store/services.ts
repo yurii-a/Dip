@@ -25,7 +25,7 @@ export const APP_IDENTITY = {
 };
 export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
 const {authorizeSession} = useAuthorizationStore.getState();
-const {connection} = useAssets.getState();
+const {connection, activeAccount} = useAssets.getState();
 //________________________________FUNCTIONS________________________________________________________________
 export async function getWallet() {
   const result = await transact(async (wallet: Web3MobileWallet) => {
@@ -75,6 +75,7 @@ export async function getAssets(): Promise<{assets: IAsset[]; solana: IAsset}> {
     }),
   });
   const data = await response.json();
+  console.log(data.result.items[0], 'results');
   const formattedResults = data.result.items.map((item: IResultItem) => {
     return {
       id: item.id,
@@ -88,11 +89,11 @@ export async function getAssets(): Promise<{assets: IAsset[]; solana: IAsset}> {
     };
   });
   const solBalance = {
-    id: 'WENWENvqqNya429ubCdR81ZmD69brwQaaBYY6p3LCpk',
+    id: '1',
     title: 'SOL',
-    image: 'SOL',
-    owner: '4KsrMapArhJR83ssme2GFQuinpUduqFaY87Z6Lni1eJX',
-    tokenAddress: '4KsrMapArhJR83ssme2GFQuinpUduqFaY87Z6Lni1eJX',
+    image: 'https://logos-world.net/wp-content/uploads/2024/01/Solana-Logo.png',
+    owner: activeAccount?.address || '',
+    tokenAddress: activeAccount?.address || '',
     balance: data.result.nativeBalance.lamports / 1e9,
     price: data.result.nativeBalance.price_per_sol,
     totalPrice: data.result.nativeBalance.total_price,

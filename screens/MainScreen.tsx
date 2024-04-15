@@ -1,28 +1,16 @@
 import React, {useEffect} from 'react';
-import {
-  ActivityIndicator,
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Header} from '../components/Header';
 import Colors from '../styles/Colours';
 import useAssets from '../store';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
-interface IProps {
-  navigation: any;
-}
 export default function MainScreen({navigation}: {navigation: any}) {
   const {
     wallet,
     solanaBalance,
     connection,
     activeAccount,
-    isZetaConnected,
     connectWallet,
     setActiveAccount,
     setIsZetaConnected,
@@ -33,7 +21,7 @@ export default function MainScreen({navigation}: {navigation: any}) {
   useEffect(() => {
     if (activeAccount) {
       setIsZetaConnected('pending');
-      connectZetaMarkets();
+      // connectZetaMarkets();
       getSolanaBalance();
     }
   }, [activeAccount, connectZetaMarkets, getSolanaBalance, setIsZetaConnected]);
@@ -63,7 +51,7 @@ export default function MainScreen({navigation}: {navigation: any}) {
             )}
           </View>
         )}
-        {isZetaConnected === 'pending' && ( //When we waiting zeta Markets Connecting
+        {/* {isZetaConnected === 'pending' && ( //When we waiting zeta Markets Connecting
           <View style={{flex: 1, justifyContent: 'center'}}>
             <ActivityIndicator color={Colors.purple} />
           </View>
@@ -79,24 +67,23 @@ export default function MainScreen({navigation}: {navigation: any}) {
               }}
             />
           </View>
+        )} */}
+        {activeAccount && ( //When zeta markets connecting success
+          <>
+            <View style={styles.success}>
+              <Text style={styles.successTitle}>
+                Success!!! Wallet connected!!
+              </Text>
+              <Text style={styles.mainBalance}>
+                {solanaBalance?.toFixed(2)} SOL
+              </Text>
+            </View>
+            <Button
+              title="ASSETS"
+              onPress={() => navigation.navigate('assets')}
+            />
+          </>
         )}
-        {activeAccount &&
-          isZetaConnected === 'success' && ( //When zeta markets connecting success
-            <>
-              <View style={styles.success}>
-                <Text style={styles.successTitle}>
-                  Success!!! Wallet connected!!
-                </Text>
-                <Text style={styles.mainBalance}>
-                  {solanaBalance?.toFixed(2)} SOL
-                </Text>
-              </View>
-              <Button
-                title="ASSETS"
-                onPress={() => navigation.navigate('assets')}
-              />
-            </>
-          )}
 
         {!wallet && (
           <View style={{marginTop: 'auto'}}>

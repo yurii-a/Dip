@@ -1,64 +1,41 @@
 import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity,FlatList} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
-
-interface IAsset {
-  title: string;
-  total: string;
-  percents: string;
-}
-
-const data: IAsset[] = [
-  {
-    title: 'Coins',
-    total: '25000',
-    percents: '+2.02%',
-  },
-  {
-    title: 'NFTS',
-    total: '25000',
-    percents: '-6.33%',
-  },
-  {
-    title: 'Trading',
-    total: '5500',
-    percents: '+999%',
-  },
-  {
-    title: 'Lending',
-    total: '6500',
-    percents: '+0.21%',
-  },
-];
+import useAssets from '../../store';
 
 const TotalSection = ({navigation}: {navigation: any}) => {
+  const {assets, solana} = useAssets();
+
   function HandlePress(title: string) {
     return navigation.navigate(title.toLowerCase());
   }
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
-        <Text style={styles.titleText}>TOTAL WEALTH</Text>
+        <Text style={styles.titleText}>ASSETS</Text>
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
         <FlatList
-          data={data}
+          data={[solana, ...assets]}
           renderItem={({item}) => (
-            <TouchableOpacity 
-              key={item.title} 
+            <TouchableOpacity
+              key={item?.title}
               style={styles.blockItem}
               onPress={() => HandlePress(item.title)}>
-              <View style={styles.icon}>
-                <Icon name="upload" size={20} color={Colors.darkGray} />
-              </View>
+              <Image source={{uri: item.image}} style={styles.image} />
               <Text style={styles.label}>{item.title}</Text>
               <View style={styles.prices}>
-                <Text style={styles.total}>{item.total}</Text>
-                <View style={styles.percents}>
-                  <Text style={{color: 'white'}}>{item.percents}</Text>
-                </View>
+                <Text style={styles.quantity}>{item.balance.toFixed(3)}</Text>
+                <Text style={styles.total}>${item.totalPrice.toFixed(2)}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -71,6 +48,18 @@ const TotalSection = ({navigation}: {navigation: any}) => {
 export default TotalSection;
 
 const styles = StyleSheet.create({
+  quantity: {
+    fontSize: 18,
+    color: 'white',
+    marginRight: 10,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    marginRight: 11,
+  },
   assetsSection: {
     marginBottom: 28,
   },
@@ -94,16 +83,6 @@ const styles = StyleSheet.create({
     padding: 8,
     alignItems: 'center',
   },
-  icon: {
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    paddingBottom: 2,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 11,
-  },
   label: {
     color: 'white',
     fontSize: 16,
@@ -112,6 +91,8 @@ const styles = StyleSheet.create({
   prices: {
     marginLeft: 'auto',
     alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: 4,
   },
   total: {
     color: 'white',

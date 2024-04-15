@@ -22,10 +22,11 @@ interface IStore {
   wallet: IWalletData | null;
   activeAccount: IAccount | null;
   totalBalance: number;
-  solana: IAsset | null;
+  solana: IAsset;
   solanaBalance: number;
   assets: IAsset[];
   positions: types.Position[];
+  airdrops: any[];
   connection: Connection;
   isZetaConnected: '' | 'pending' | 'success' | 'failure';
   connectWallet: () => void;
@@ -41,10 +42,20 @@ const useAssets = create<IStore>((set, get) => ({
   wallet: null,
   activeAccount: null,
   totalBalance: 0,
-  solana: null,
+  solana: {
+    id: '',
+    title: 'SOL',
+    image: 'https://logos-world.net/wp-content/uploads/2024/01/Solana-Logo.png',
+    owner: '',
+    tokenAddress: '',
+    balance: 0,
+    price: 0,
+    totalPrice: 0,
+  },
   solanaBalance: 0,
   assets: [],
   positions: [],
+  airdrops: [],
   connection: new Connection(RPC_ENDPOINT, {commitment: 'confirmed'}),
   isZetaConnected: '',
 
