@@ -15,7 +15,7 @@ import {
   transact,
   Web3MobileWallet,
 } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
-import {IAccount, IResultItem} from './interfaces';
+import {IAccount, IAsset, IResultItem} from './interfaces';
 import {useAuthorizationStore} from './useAuthorizationStore';
 import useAssets from './index';
 export const APP_IDENTITY = {
@@ -48,7 +48,12 @@ export async function getWallet() {
   return wallet;
 }
 
-export async function getAssets() {
+export async function GetSolanaBalance(account: IAccount) {
+  const publicKey = new PublicKey(toUint8Array(account.address));
+  const fetchedBalance = await connection.getBalance(publicKey);
+  return fetchedBalance / 1e9;
+}
+export async function getAssets(): Promise<{assets: IAsset[]; solana: IAsset}> {
   const url =
     'https://mainnet.helius-rpc.com/?api-key=fa9b9644-4d07-4b1e-98ed-ab113cfcdd25';
   const response = await fetch(url, {
@@ -137,9 +142,9 @@ export async function connectZetaMarkets(activeAccount: IAccount | null) {
   );
   try {
     await Exchange.load(loadExchangeConfig, zetaWallet);
-    return true;
+    return 'success';
   } catch (error) {
-    return false;
+    return 'failure';
   }
 }
 export async function getPositions(activeAccount: IAccount | null) {
@@ -159,4 +164,12 @@ export async function getPositions(activeAccount: IAccount | null) {
     .flat();
 
   return positions;
+}
+export async function getSolanaBalance(
+  account: IAccount | null,
+): Promise<number> {
+  if (!account) return 0;
+  const publicKey = new PublicKey(toUint8Array(account.address));
+  const fetchedBalance = await connection.getBalance(publicKey);
+  return fetchedBalance / 1e9;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity,FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 
@@ -32,7 +32,10 @@ const data: IAsset[] = [
   },
 ];
 
-const TotalSection = () => {
+const TotalSection = ({navigation}: {navigation: any}) => {
+  function HandlePress(title: string) {
+    return navigation.navigate(title.toLowerCase());
+  }
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -40,20 +43,26 @@ const TotalSection = () => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
-        {data.map(item => (
-          <TouchableOpacity key={item.title} style={styles.blockItem}>
-            <View style={styles.icon}>
-              <Icon name="upload" size={20} color={Colors.darkGray} />
-            </View>
-            <Text style={styles.label}>{item.title}</Text>
-            <View style={styles.prices}>
-              <Text style={styles.total}>{item.total}</Text>
-              <View style={styles.percents}>
-                <Text style={{color: 'white'}}>{item.percents}</Text>
+        <FlatList
+          data={data}
+          renderItem={({item}) => (
+            <TouchableOpacity 
+              key={item.title} 
+              style={styles.blockItem}
+              onPress={() => HandlePress(item.title)}>
+              <View style={styles.icon}>
+                <Icon name="upload" size={20} color={Colors.darkGray} />
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+              <Text style={styles.label}>{item.title}</Text>
+              <View style={styles.prices}>
+                <Text style={styles.total}>{item.total}</Text>
+                <View style={styles.percents}>
+                  <Text style={{color: 'white'}}>{item.percents}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </View>
   );

@@ -62,18 +62,6 @@ export interface IResultItem {
   supply: any; // This will depend on the actual data type
   token_info: TokenInfo;
 }
-
-export interface ICoin {
-  id: string;
-  title: string;
-  image: string;
-  owner: string;
-  tokenAddress: string;
-  balance: number;
-  price: number;
-  totalPrice: number;
-}
-
 export interface IAccount {
   address: string;
   label: string | undefined;
@@ -91,3 +79,13 @@ export type Authorization = {
   authToken: AuthToken;
   activeAccount: IAccount | null;
 };
+export interface IAsset {
+  id: string;
+  title: string;
+  image: string;
+  owner: string;
+  tokenAddress: string;
+  balance: number;
+  price: number;
+  totalPrice: number;
+}

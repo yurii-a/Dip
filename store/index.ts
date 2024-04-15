@@ -1,11 +1,12 @@
 import {create} from 'zustand';
-import {IAccount, ICoin, IWalletData} from './interfaces';
+import {IAccount, IAsset, IWalletData} from './interfaces';
 import {types} from '@zetamarkets/sdk';
 
 import {
   connectZetaMarkets,
   getAssets,
   getPositions,
+  getSolanaBalance,
   getWallet,
 } from './services';
 import {Connection} from '@solana/web3.js';
@@ -20,62 +21,68 @@ export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
 interface IStore {
   wallet: IWalletData | null;
   activeAccount: IAccount | null;
-  solana: ICoin;
-  assets: ICoin[];
+  totalBalance: number;
+  solana: IAsset | null;
+  solanaBalance: number;
+  assets: IAsset[];
   positions: types.Position[];
   connection: Connection;
-  isZetaConnected: boolean;
+  isZetaConnected: '' | 'pending' | 'success' | 'failure';
   connectWallet: () => void;
   setActiveAccount: (account: IAccount) => void;
-  setPositions: (positions: types.Position[]) => void;
+  setIsZetaConnected: (status: '' | 'pending' | 'success' | 'failure') => void;
   getAssets: () => void;
   connectZetaMarkets: () => void;
   getPositions: () => void;
+  getSolanaBalance: () => void;
 }
 
 const useAssets = create<IStore>((set, get) => ({
   wallet: null,
   activeAccount: null,
-  solana: {
-    id: '',
-    title: 'SOL',
-    image: 'SOL',
-    owner: '',
-    tokenAddress: '',
-    balance: 0,
-    price: 0,
-    totalPrice: 0,
-  },
+  totalBalance: 0,
+  solana: null,
+  solanaBalance: 0,
   assets: [],
   positions: [],
   connection: new Connection(RPC_ENDPOINT, {commitment: 'confirmed'}),
-  isZetaConnected: false,
+  isZetaConnected: '',
+
   connectWallet: async () => {
     const wallet = await getWallet();
     set(state => ({
       ...state,
       wallet: wallet,
-      activeAccount: wallet.accounts[0],
     }));
-    const res = await connectZetaMarkets(wallet.accounts[0]);
-    set(state => ({...state, isZetaConnected: res}));
   },
-  setActiveAccount: (account: IAccount) => {
+  setActiveAccount: account => {
     set(state => ({...state, activeAccount: account}));
+  },
+  setIsZetaConnected: status => {
+    set(state => ({...state, isZetaConnected: status}));
   },
   getAssets: async () => {
     const {assets, solana} = await getAssets();
-    set(state => ({...state, solana: solana}));
-    set(state => ({...state, assets: assets}));
+    const totalAssets =
+      solana.totalPrice + assets.reduce((a, i) => a + i.totalPrice, 0);
+    set(state => ({
+      ...state,
+      assets: assets,
+      solana: solana,
+      totalBalance: totalAssets,
+    }));
   },
-  setPositions: positions => {
-    set(state => ({...state, positions: positions}));
+  getSolanaBalance: async () => {
+    const account = get().activeAccount;
+    const balance = await getSolanaBalance(account);
+    set(state => ({...state, solanaBalance: balance}));
   },
   connectZetaMarkets: async () => {
     const account = get().activeAccount;
     const res = await connectZetaMarkets(account);
     set(state => ({...state, isZetaConnected: res}));
   },
+
   getPositions: async () => {
     const account = get().activeAccount;
     const positions = await getPositions(account);

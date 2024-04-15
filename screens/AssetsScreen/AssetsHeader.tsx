@@ -1,25 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
-interface IProps {
-  navigation: any; // Adjust type according to your navigation prop type
-}
-const AssetsHeader = ({navigation}: IProps) => {
-  const {solana, assets} = useAssets();
-  const [total, setTotal] = useState(0);
+import {useNavigation} from '@react-navigation/native';
 
-  useEffect(() => {
-    if (assets) {
-      const totalAssets = assets.reduce((acc, asset) => {
-        return acc + asset.totalPrice;
-      }, 0);
-      setTotal(totalAssets + solana.totalPrice);
-    }
-  }, [assets, solana]);
+const AssetsHeader = () => {
+  const navigation = useNavigation();
+  const {totalBalance} = useAssets();
 
   return (
     <View style={styles.headerContainer}>
@@ -34,7 +24,7 @@ const AssetsHeader = ({navigation}: IProps) => {
         </TouchableOpacity>
         <Text style={styles.navMenuText}>DIP</Text>
       </View>
-      <Text style={styles.balance}>${total.toFixed(2)}</Text>
+      <Text style={styles.balance}>${totalBalance.toFixed(2)}</Text>
 
       <View style={styles.options}>
         <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
@@ -118,3 +108,4 @@ const styles = StyleSheet.create({
     color: Colors.darkGray,
   },
 });
+

@@ -5,7 +5,7 @@ import AssetsScreen from './screens/AssetsScreen/AssetsScreen';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
+import CoinsScreen from './screens/CoinsScreen/CoinsScreen';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -20,6 +20,11 @@ export default function App() {
         <Stack.Screen
           name="assets"
           component={AssetsScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="coins"
+          component={CoinsScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

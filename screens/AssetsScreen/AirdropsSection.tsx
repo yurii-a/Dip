@@ -1,5 +1,12 @@
 import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  FlatList,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
@@ -14,21 +21,46 @@ const AirdropsSection = () => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
+        {newData.length > 0 && (
+          <FlatList
+            data={newData}
+            renderItem={({item}) => (
+              <TouchableOpacity key={item?.title} style={styles.blockItem}>
+                <Image
+                  resizeMode="contain"
+                  source={require(`./../../assets/img/etherium.png`)}
+                  style={styles.image}
+                />
+                <Text style={styles.label}>{item?.title}</Text>
+                <View style={styles.prices}>
+                  <Text style={styles.total}>
+                    {item?.balance ? item?.balance.toFixed(2) + ' coins' : ''}
+                  </Text>
+                  <View style={styles.percents}>
+                    <Text style={{color: 'white', textAlign: 'center'}}>
+                      $ {item?.totalPrice.toFixed(2)}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        )}
         {newData.map(item => (
-          <TouchableOpacity key={item.title} style={styles.blockItem}>
+          <TouchableOpacity key={item?.title} style={styles.blockItem}>
             <Image
               resizeMode="contain"
               source={require(`./../../assets/img/etherium.png`)}
               style={styles.image}
             />
-            <Text style={styles.label}>{item.title}</Text>
+            <Text style={styles.label}>{item?.title}</Text>
             <View style={styles.prices}>
               <Text style={styles.total}>
-                {item.balance ? item.balance.toFixed(2) + ' coins' : ''}
+                {item?.balance ? item?.balance.toFixed(2) + ' coins' : ''}
               </Text>
               <View style={styles.percents}>
                 <Text style={{color: 'white', textAlign: 'center'}}>
-                  $ {item.totalPrice.toFixed(2)}
+                  $ {item?.totalPrice.toFixed(2)}
                 </Text>
               </View>
             </View>

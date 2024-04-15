@@ -1,48 +1,42 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  ActivityIndicator,
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Header} from '../components/Header';
 import Colors from '../styles/Colours';
 import useAssets from '../store';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {IAccount} from '../store/interfaces';
-import {PublicKey} from '@solana/web3.js';
-import {toUint8Array} from 'js-base64';
+
 interface IProps {
   navigation: any;
 }
-export default function MainScreen({navigation}: IProps) {
-  const [balance, setBalance] = useState<number | null>(null);
+export default function MainScreen({navigation}: {navigation: any}) {
   const {
     wallet,
-    isZetaConnected,
+    solanaBalance,
     connection,
     activeAccount,
+    isZetaConnected,
     connectWallet,
     setActiveAccount,
+    setIsZetaConnected,
     connectZetaMarkets,
+    getSolanaBalance,
   } = useAssets();
 
-  const fetchAndUpdateBalance = useCallback(
-    async (account: IAccount) => {
-      const publicKey = new PublicKey(toUint8Array(account.address));
-      const fetchedBalance = await connection.getBalance(publicKey);
-      setBalance(fetchedBalance / 1e9);
-    },
-    [connection],
-  );
   useEffect(() => {
-    if (!activeAccount) {
-      return;
-    }
-    fetchAndUpdateBalance(activeAccount);
-  }, [fetchAndUpdateBalance, activeAccount]);
-
-  useEffect(() => {
-    if (!isZetaConnected) {
+    if (activeAccount) {
+      setIsZetaConnected('pending');
       connectZetaMarkets();
+      getSolanaBalance();
     }
-  }, [connectZetaMarkets, isZetaConnected]);
+  }, [activeAccount, connectZetaMarkets, getSolanaBalance, setIsZetaConnected]);
 
   return (
     <>
@@ -51,42 +45,64 @@ export default function MainScreen({navigation}: IProps) {
         {wallet && !activeAccount && (
           <View style={styles.wallets}>
             <Text style={styles.accountsTitle}>Accounts: </Text>
-
-            {wallet &&
-              wallet.accounts.map(item => (
-                <TouchableOpacity
-                  key={item.label}
-                  onPress={() => {
-                    setActiveAccount(item);
-                  }}>
-                  <View style={styles.address}>
-                    <Icon name="link" size={20} />
-                    <Text style={styles.addressText}>{item.address}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
+            {wallet && (
+              <FlatList
+                data={wallet.accounts}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setActiveAccount(item);
+                    }}>
+                    <View style={styles.address}>
+                      <Icon name="link" size={20} />
+                      <Text style={styles.addressText}>{item.address}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
           </View>
         )}
-        {activeAccount && (
-          <>
-            <View style={styles.success}>
-              <Text style={styles.successTitle}>
-                Success!!! Wallet connected!!
-              </Text>
-              <Text style={styles.mainBalance}>{balance?.toFixed(2)} SOL</Text>
-            </View>
-            {/* {activeAccount && <Button
-              title="fetch"
-              onPress={() => connectZetaMarkets(activeAccount)}
-              />
-            )} */}
-            <Button
-              title="ASSETS"
-              onPress={() => navigation.navigate('assets')}
-            />
-          </>
+        {isZetaConnected === 'pending' && ( //When we waiting zeta Markets Connecting
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <ActivityIndicator color={Colors.purple} />
+          </View>
         )}
-
+        {isZetaConnected === 'failure' && ( //When zeta markets connecting failed
+          <View>
+            <Text style={styles.successTitle}> reject </Text>
+            <Button
+              title="Reconnect"
+              onPress={() => {
+                setIsZetaConnected('pending');
+                connectZetaMarkets();
+              }}
+            />
+          </View>
+        )}
+        {activeAccount &&
+          isZetaConnected === 'success' && ( //When zeta markets connecting success
+            <>
+              <View style={styles.success}>
+                <Text style={styles.successTitle}>
+                  Success!!! Wallet connected!!
+                </Text>
+                <Text style={styles.mainBalance}>
+                  {solanaBalance?.toFixed(2)} SOL
+                </Text>
+              </View>
+              <Button
+                title="ASSETS"
+                onPress={() => navigation.navigate('assets')}
+              />
+            </>
+          )}
+        {/* {wallet && (
+          <Button
+            title="ASSETS"
+            onPress={() => navigation.navigate('assets')}
+          />
+        )} */}
         {!wallet && (
           <View style={{marginTop: 'auto'}}>
             <Button title="Connect wallet" onPress={connectWallet} />

@@ -7,20 +7,17 @@ import AirdropsSection from './AirdropsSection';
 import PositionsSection from './PositionsSection';
 import useAssets from '../../store';
 
-interface IProps {
-  navigation: any;
-}
-const AssetsScreen = ({navigation}: IProps) => {
-  const {assets, positions, getAssets, getPositions} = useAssets();
+const AssetsScreen = () => {
+  const {getAssets, getPositions} = useAssets();
+
   useEffect(() => {
     getAssets();
-    getPositions();
+    // getPositions();
   }, [getAssets, getPositions]);
-  console.log(assets, 'assets');
-  console.log(positions, 'positions');
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <AssetsHeader navigation={navigation} />
+      <AssetsHeader />
       <ScrollView style={styles.mainContent}>
         <TotalSection />
         <AirdropsSection />
