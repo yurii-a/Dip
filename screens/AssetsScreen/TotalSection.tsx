@@ -3,19 +3,61 @@ import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
-
+const data: {title: string; total: string; percents: string}[] = [
+  {
+    title: 'NFTS',
+    total: '25000',
+    percents: '-6.33%',
+  },
+  {
+    title: 'Trading',
+    total: '5500',
+    percents: '+999%',
+  },
+  {
+    title: 'Lending',
+    total: '6500',
+    percents: '+0.21%',
+  },
+];
 const TotalSection = () => {
   const {assets, solana} = useAssets();
   // function HandlePress(title: string) {
   //   return navigation.navigate(title.toLowerCase());
   // }
+  const totalAssets = assets.reduce((acc, asset) => acc + asset.totalPrice, 0);
+  console.log(totalAssets, 'total assets');
+  const coins = {
+    title: 'Coins',
+    total: +totalAssets + solana.totalPrice,
+    percents: '+2.02%',
+  };
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
         <Text style={styles.titleText}>ASSETS</Text>
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
+
       <View style={styles.block}>
+        {[coins, ...data].map(item => (
+          <TouchableOpacity key={item.title} style={styles.blockItem}>
+            <View style={styles.icon}>
+              <Icon name="upload" size={20} color={Colors.darkGray} />
+            </View>
+            <Text style={styles.label}>{item.title}</Text>
+            <View style={styles.prices}>
+              <Text style={styles.total}>
+                $ {Number(item.total).toFixed(2)}
+              </Text>
+              <View style={styles.percents}>
+                <Text style={{color: 'white'}}>{item.percents}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+      {/* <View style={styles.block}>
         {[solana, ...assets].map(item => (
           <TouchableOpacity
             key={item?.title}
@@ -30,7 +72,7 @@ const TotalSection = () => {
             </View>
           </TouchableOpacity>
         ))}
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -43,6 +85,16 @@ const styles = StyleSheet.create({
     color: 'white',
     marginRight: 10,
     fontWeight: 'bold',
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    paddingBottom: 2,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 11,
   },
   image: {
     width: 40,

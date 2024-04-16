@@ -78,7 +78,6 @@ const PositionsSection = () => {
     </View>
   );
 };
-
 export default PositionsSection;
 
 const styles = StyleSheet.create({
