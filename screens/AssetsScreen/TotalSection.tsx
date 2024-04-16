@@ -1,22 +1,14 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  FlatList,
-  Image,
-} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
 
-const TotalSection = ({navigation}: {navigation: any}) => {
+const TotalSection = () => {
   const {assets, solana} = useAssets();
-
-  function HandlePress(title: string) {
-    return navigation.navigate(title.toLowerCase());
-  }
+  // function HandlePress(title: string) {
+  //   return navigation.navigate(title.toLowerCase());
+  // }
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -24,22 +16,20 @@ const TotalSection = ({navigation}: {navigation: any}) => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
-        <FlatList
-          data={[solana, ...assets]}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              key={item?.title}
-              style={styles.blockItem}
-              onPress={() => HandlePress(item.title)}>
-              <Image source={{uri: item.image}} style={styles.image} />
-              <Text style={styles.label}>{item.title}</Text>
-              <View style={styles.prices}>
-                <Text style={styles.quantity}>{item.balance.toFixed(3)}</Text>
-                <Text style={styles.total}>${item.totalPrice.toFixed(2)}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+        {[solana, ...assets].map(item => (
+          <TouchableOpacity
+            key={item?.title}
+            style={styles.blockItem}
+            // onPress={() => HandlePress(item.title)}
+          >
+            <Image source={{uri: item.image}} style={styles.image} />
+            <Text style={styles.label}>{item.title}</Text>
+            <View style={styles.prices}>
+              <Text style={styles.quantity}>{item.balance.toFixed(3)}</Text>
+              <Text style={styles.total}>${item.totalPrice.toFixed(2)}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );

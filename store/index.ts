@@ -5,6 +5,8 @@ import {types} from '@zetamarkets/sdk';
 import {
   connectZetaMarkets,
   getAssets,
+  getKaminoAirdrop,
+  getParclAirdrop,
   getPositions,
   getSolanaBalance,
   getWallet,
@@ -27,13 +29,15 @@ interface IStore {
   assets: IAsset[];
   positions: types.Position[];
   airdrops: any[];
+  parcl: {balance: string};
+  kamino: {quantity: string; name: string}[];
   connection: Connection;
   isZetaConnected: '' | 'pending' | 'success' | 'failure';
   connectWallet: () => void;
   setActiveAccount: (account: IAccount) => void;
   setIsZetaConnected: (status: '' | 'pending' | 'success' | 'failure') => void;
   getAssets: () => void;
-  connectZetaMarkets: () => void;
+  connectZetaMarkets: (account: IAccount) => void;
   getPositions: () => void;
   getAirdrops: () => void;
   getSolanaBalance: () => void;
@@ -57,6 +61,8 @@ const useAssets = create<IStore>((set, get) => ({
   assets: [],
   positions: [],
   airdrops: [],
+  parcl: {balance: '0'},
+  kamino: [],
   connection: new Connection(RPC_ENDPOINT, {commitment: 'confirmed'}),
   isZetaConnected: '',
 
@@ -75,7 +81,8 @@ const useAssets = create<IStore>((set, get) => ({
     set(state => ({...state, isZetaConnected: status}));
   },
   getAssets: async () => {
-    const {assets, solana} = await getAssets();
+    const account = get().activeAccount;
+    const {assets, solana} = await getAssets(String(account?.publicKey));
     const totalAssets =
       solana.totalPrice + assets.reduce((a, i) => a + i.totalPrice, 0);
     set(state => ({
@@ -85,14 +92,19 @@ const useAssets = create<IStore>((set, get) => ({
       totalBalance: totalAssets,
     }));
   },
-  getAirdrops: async () => {},
+  getAirdrops: async () => {
+    const account = get().activeAccount;
+    const parcl = await getParclAirdrop(String(account?.publicKey));
+    const kamino = await getKaminoAirdrop(String(account?.publicKey));
+    set(state => ({...state, parcl: parcl, kamino: kamino}));
+  },
   getSolanaBalance: async () => {
     const account = get().activeAccount;
     const balance = await getSolanaBalance(account);
     set(state => ({...state, solanaBalance: balance}));
   },
-  connectZetaMarkets: async () => {
-    const res = await connectZetaMarkets();
+  connectZetaMarkets: async account => {
+    const res = await connectZetaMarkets(account);
     set(state => ({...state, isZetaConnected: res}));
   },
 

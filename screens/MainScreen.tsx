@@ -10,21 +10,16 @@ import {
 } from 'react-native';
 import Colors from '../styles/Colours';
 import useAssets from '../store';
-import {getAllocationsAirdrop, getPointsAirdrop} from '../store/services';
 export default function MainScreen({navigation}: {navigation: any}) {
-  const {activeAccount, connectWallet, setIsZetaConnected, getSolanaBalance} =
+  const {activeAccount, connectWallet, getAirdrops, getSolanaBalance} =
     useAssets();
-
   useEffect(() => {
     if (activeAccount) {
-      setIsZetaConnected('pending');
       getSolanaBalance();
-      getAllocationsAirdrop(String(activeAccount.publicKey));
-      getPointsAirdrop(String(activeAccount.publicKey));
+      getAirdrops();
       navigation.navigate('assets');
     }
-  }, [activeAccount, getSolanaBalance, navigation, setIsZetaConnected]);
-
+  }, [activeAccount, getSolanaBalance, getAirdrops, navigation]);
   return (
     <>
       <View style={styles.mainContainer}>

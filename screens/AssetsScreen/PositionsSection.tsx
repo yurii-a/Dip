@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, FlatList} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
@@ -7,6 +7,7 @@ import useAssets from '../../store';
 const PositionsSection = () => {
   const {
     positions,
+    activeAccount,
     isZetaConnected,
     setIsZetaConnected,
     connectZetaMarkets,
@@ -14,19 +15,28 @@ const PositionsSection = () => {
   } = useAssets();
 
   useEffect(() => {
-    if (isZetaConnected === '') {
+    if (isZetaConnected === '' && activeAccount) {
+      console.log('work inside');
       setIsZetaConnected('pending');
-      connectZetaMarkets();
+      connectZetaMarkets(activeAccount);
     } else if (isZetaConnected === 'success') {
       getPositions();
     }
   }, [
     positions,
-    connectZetaMarkets,
     isZetaConnected,
+    activeAccount,
     setIsZetaConnected,
+    connectZetaMarkets,
     getPositions,
   ]);
+  function reconnect() {
+    if (activeAccount) {
+      setIsZetaConnected('pending');
+      connectZetaMarkets(activeAccount);
+    }
+  }
+
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -34,28 +44,36 @@ const PositionsSection = () => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
-        <FlatList
-          data={positions}
-          renderItem={({item}) => (
-            <TouchableOpacity key={item.asset} style={styles.blockItem}>
-              {/* <Image
-                resizeMode="contain"
-                source={{uri: item.img}}
-                style={styles.image}
-              /> */}
-              <View>
-                <Text style={styles.name}>{item.asset} </Text>
-                <Text style={styles.label}>
-                  {item.costOfTrades} cost of trades
-                </Text>
-              </View>
-              <View style={styles.open}>
-                <Text style={styles.total}>+${item.size} size</Text>
-                <Icon name="chevron-right" size={20} color={Colors.titleText} />
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+        {isZetaConnected === 'pending' && (
+          <Text style={styles.connectStatus}>Connectiong zeta markets</Text>
+        )}
+        {isZetaConnected === 'failure' && (
+          <TouchableOpacity
+            style={styles.connectStatusContainer}
+            onPress={reconnect}>
+            <Text style={styles.connectStatusFailed}>Connect is failed</Text>
+            <Text style={styles.connectStatusClick}>Click to reconnect</Text>
+          </TouchableOpacity>
+        )}
+        {positions.map(item => (
+          <TouchableOpacity key={item.asset} style={styles.blockItem}>
+            {/* <Image
+              resizeMode="contain"
+              source={{uri: item.img}}
+              style={styles.image}
+            /> */}
+            <View>
+              <Text style={styles.name}>{item.asset} </Text>
+              <Text style={styles.label}>
+                {item.costOfTrades} cost of trades
+              </Text>
+            </View>
+            <View style={styles.open}>
+              <Text style={styles.total}>+${item.size} size</Text>
+              <Icon name="chevron-right" size={20} color={Colors.titleText} />
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
@@ -64,6 +82,29 @@ const PositionsSection = () => {
 export default PositionsSection;
 
 const styles = StyleSheet.create({
+  connectStatusClick: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  connectStatusContainer: {
+    padding: 20,
+  },
+  connectStatusFailed: {
+    color: '#ff483b',
+    fontSize: 20,
+    marginBottom: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  connectStatus: {
+    padding: 20,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   assetsSection: {
     marginBottom: 28,
   },

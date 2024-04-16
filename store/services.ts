@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {PublicKey, Transaction} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
 import axios from 'axios';
@@ -28,8 +29,8 @@ export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
 const {authorizeSession} = useAuthorizationStore.getState();
 const {connection, activeAccount} = useAssets.getState();
 //________________________________FUNCTIONS________________________________________________________________
-export async function getWallet() {
-  const result = await transact(async (wallet: Web3MobileWallet) => {
+export async function getWallet() { //Here we can connect solana wallets that we have at our phone
+  const result = await transact(async (wallet: Web3MobileWallet) => { //function of connectin wallet
     const authorizationResult = await wallet.authorize({
       identity: APP_IDENTITY,
     });
@@ -55,29 +56,24 @@ export async function GetSolanaBalance(account: IAccount) {
   const fetchedBalance = await connection.getBalance(publicKey);
   return fetchedBalance / 1e9;
 }
-export async function getAssets(): Promise<{assets: IAsset[]; solana: IAsset}> {
+export async function getAssets(address: string): Promise<{assets: IAsset[]; solana: IAsset}> {//get balances from helius api using our solana wallet address
+
   const url =
     'https://mainnet.helius-rpc.com/?api-key=fa9b9644-4d07-4b1e-98ed-ab113cfcdd25';
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: '',
-      method: 'getAssetsByOwner',
-      params: {
-        ownerAddress: '4KsrMapArhJR83ssme2GFQuinpUduqFaY87Z6Lni1eJX',
-        displayOptions: {
-          showFungible: true,
-          showNativeBalance: true,
-        },
+  const requestData = {
+    jsonrpc: '2.0',
+    id: '',
+    method: 'getAssetsByOwner',
+    params: {
+      ownerAddress: address,
+      displayOptions: {
+        showFungible: true,
+        showNativeBalance: true,
       },
-    }),
-  });
-  const data = await response.json();
-  const formattedResults = data.result.items.map((item: IResultItem) => {
+    },
+  };
+  const response = await axios.post(url, requestData);
+  const formattedResults = response.data.result.items.map((item: IResultItem) => {
     return {
       id: item.id,
       title: item.token_info.symbol,
@@ -95,9 +91,9 @@ export async function getAssets(): Promise<{assets: IAsset[]; solana: IAsset}> {
     image: 'https://logos-world.net/wp-content/uploads/2024/01/Solana-Logo.png',
     owner: activeAccount?.address || '',
     tokenAddress: activeAccount?.address || '',
-    balance: data.result.nativeBalance.lamports / 1e9,
-    price: data.result.nativeBalance.price_per_sol,
-    totalPrice: data.result.nativeBalance.total_price,
+    balance: response.data.result.nativeBalance.lamports / 1e9,
+    price: response.data.result.nativeBalance.price_per_sol,
+    totalPrice: response.data.result.nativeBalance.total_price,
   };
   return {assets: formattedResults, solana: solBalance};
 }
@@ -128,9 +124,8 @@ export async function getZetaWallet(activeAccount: IAccount | null) {
   return zetaWallet;
 }
 
-export async function connectZetaMarkets() {
-  const zetaWallet = await getZetaWallet(activeAccount);
-
+export async function connectZetaMarkets(account: IAccount) {
+  const zetaWallet = await getZetaWallet(account);
   const loadExchangeConfig = types.defaultLoadExchangeConfig(
     Network.MAINNET,
     connection,
@@ -172,7 +167,7 @@ export async function getSolanaBalance(
   return fetchedBalance / 1e9;
 }
 
-export async function getAllocationsAirdrop(address: string) {
+export async function getKaminoAirdrop(address: string) {
   const url = `https://api.hubbleprotocol.io/v2/airdrop/users/${address}/allocations?source=Season1`;
   try {
     const response = await axios.get(url, {
@@ -181,15 +176,13 @@ export async function getAllocationsAirdrop(address: string) {
         'user-agent': 'Mozilla/5.0',
       },
     });
-    console.log(response.data, 'responce xxxxxxxxx');
     return response.data;
   } catch (error) {
     console.error('Error fetching airdrop allocations:', error);
-    // Handle error appropriately
     throw error;
   }
 }
-export async function getPointsAirdrop(address: string) {
+export async function getParclAirdrop(address: string) {
   const url = `https://parcl-api.com/v1/points/balance?user=${address}`;
 
   try {
@@ -199,8 +192,6 @@ export async function getPointsAirdrop(address: string) {
         origin: 'https://app.parcl.co',
       },
     });
-
-    console.log(response.data, 'responce xxxxxxxxx2');
     return response.data;
   } catch (error) {
     console.error('Error fetching user points balance:', error);
