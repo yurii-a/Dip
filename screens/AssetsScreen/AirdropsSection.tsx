@@ -1,27 +1,15 @@
 import React, {useEffect} from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  ImageSourcePropType,
-} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
 
 const AirdropsSection = () => {
-  const {kamino, parcl, getAirdrops} = useAssets();
+  const {airdrops, getAirdrops} = useAssets();
   useEffect(() => {
     getAirdrops();
   }, [getAirdrops]);
-  const icons = (name: string): {[key: string]: ImageSourcePropType} => {
-    return name === 'PRCL'
-      ? require('../../assets/img/parcl.png')
-      : require('../../assets/img/kamino.png');
-  };
-  const airdrops = [parcl, ...kamino];
+
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -33,14 +21,12 @@ const AirdropsSection = () => {
           <TouchableOpacity key={item.name} style={styles.blockItem}>
             <Image
               resizeMode="contain"
-              source={icons(item.name)}
+              source={item.logo}
               style={styles.image}
             />
             <Text style={styles.label}>{item.name}</Text>
             <View style={styles.prices}>
-              <Text style={styles.total}>
-                {Number(item.quantity).toFixed(2)} pts
-              </Text>
+              <Text style={styles.total}>{Number(item.tokens).toFixed(0)}</Text>
               <Text style={styles.status}>Claim</Text>
             </View>
           </TouchableOpacity>

@@ -161,7 +161,7 @@ export async function getPositions(activeAccount: IAccount | null) {
 export async function getSolanaBalance(
   account: IAccount | null,
 ): Promise<number> {
-  if (!account) return 0;
+  if (!account) {return 0;}
   const publicKey = new PublicKey(toUint8Array(account.address));
   const fetchedBalance = await connection.getBalance(publicKey);
   return fetchedBalance / 1e9;
@@ -170,29 +170,38 @@ export async function getSolanaBalance(
 export async function getKaminoAirdrop(address: string) {
   const url = `https://api.hubbleprotocol.io/v2/airdrop/users/${address}/allocations?source=Season1`;
   try {
-    const response = await axios.get(url, {
-      headers: {
-        accept: 'application/json',
-        'user-agent': 'Mozilla/5.0',
-      },
-    });
-    return response.data;
+    const response = await axios.get(url);
+    const total = response.data.reduce((total, item) => {
+      const quantity = parseFloat(item.quantity);
+      if (!isNaN(quantity)) {
+          return total + quantity;
+      } else {
+          return total;
+      }
+    }, 0);
+    return total;
   } catch (error) {
     console.error('Error fetching airdrop allocations:', error);
     throw error;
   }
 }
-export async function getParclAirdrop(address: string) {
-  const url = `https://parcl-api.com/v1/points/balance?user=${address}`;
 
+export async function getParclAirdrop(address: string) {
+  const url = `https://app.parcl.co/api/allocation/${address}`;
   try {
-    const response = await axios.get(url, {
-      headers: {
-        authority: 'parcl-api.com',
-        origin: 'https://app.parcl.co',
-      },
-    });
+    const response = await axios.get(url);
     return response.data;
+  } catch (error) {
+    console.error('Error fetching user points balance:', error);
+    throw error;
+  }
+}
+
+export async function getDriftAirdrop(address: string) {
+  const url = `https://app.drift.trade/api/points-drop?authority=${address}&bust`;
+  try {
+    const response = await axios.get(url);
+    return response.data.data.latestDrop.authorityScore;
   } catch (error) {
     console.error('Error fetching user points balance:', error);
     throw error;

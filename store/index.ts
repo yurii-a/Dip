@@ -5,6 +5,7 @@ import {types} from '@zetamarkets/sdk';
 import {
   connectZetaMarkets,
   getAssets,
+  getDriftAirdrop,
   getKaminoAirdrop,
   getParclAirdrop,
   getPositions,
@@ -12,6 +13,7 @@ import {
   getWallet,
 } from './services';
 import {Connection} from '@solana/web3.js';
+import {Airdrop} from './Airdrop';
 
 export const APP_IDENTITY = {
   name: 'Dip',
@@ -28,9 +30,7 @@ interface IStore {
   solanaBalance: number;
   assets: IAsset[];
   positions: types.Position[];
-  airdrops: any[];
-  parcl: {quantity: number; name: string};
-  kamino: {quantity: number; name: string}[];
+  airdrops: Airdrop[];
   connection: Connection;
   isZetaConnected: '' | 'pending' | 'success' | 'failure';
   connectWallet: () => void;
@@ -61,8 +61,6 @@ const useAssets = create<IStore>((set, get) => ({
   assets: [],
   positions: [],
   airdrops: [],
-  parcl: {name: 'PRCL', quantity: 0},
-  kamino: [],
   connection: new Connection(RPC_ENDPOINT, {commitment: 'confirmed'}),
   isZetaConnected: '',
 
@@ -94,12 +92,21 @@ const useAssets = create<IStore>((set, get) => ({
   },
   getAirdrops: async () => {
     const account = get().activeAccount;
-    const parcl = await getParclAirdrop(String(account?.publicKey));
-    const kamino = await getKaminoAirdrop(String(account?.publicKey));
+    if (account === null) {
+      return;
+    }
+    const wallet = account.publicKey.toString();
+    const parcl = await getParclAirdrop(wallet);
+    const kamino_total = await getKaminoAirdrop(wallet);
+    const drift_total = await getDriftAirdrop(wallet);
+
     set(state => ({
       ...state,
-      parcl: {name: 'PRCL', quantity: parcl.balance},
-      kamino: kamino,
+      airdrops: [
+        Airdrop.createParcl(parcl.allocation),
+        Airdrop.createKamino(kamino_total),
+        Airdrop.createDrift(drift_total),
+      ],
     }));
   },
   getSolanaBalance: async () => {
