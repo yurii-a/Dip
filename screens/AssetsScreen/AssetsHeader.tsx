@@ -54,30 +54,32 @@ const AssetsHeader: React.FC<HeaderProps> = ({
         ${totalBalance.toFixed(2)}
       </Animated.Text>
 
-      <Animated.View style={[styles.options, {bottom}]}>
-        <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
-          <AntIcon name="pluscircleo" size={24} color={Colors.darkGray} />
-          {isLabels && <Text style={styles.optionLabel}>Top up</Text>}
-        </TouchableOpacity>
-        <View style={styles.line} />
-        <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
-          <MaterialCommunityIcons
-            name="line-scan"
-            size={24}
-            color={Colors.darkGray}
-          />
-          {isLabels && <Text style={styles.optionLabel}>Transfer</Text>}
-        </TouchableOpacity>
-        <View style={styles.line} />
-        <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
-          <MaterialCommunityIcons
-            name="qrcode-plus"
-            size={24}
-            color={Colors.darkGray}
-          />
-          {isLabels && <Text style={styles.optionLabel}>Recieve</Text>}
-        </TouchableOpacity>
-      </Animated.View>
+      {isLabels && (
+        <Animated.View style={[styles.options, {bottom}]}>
+          <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
+            <AntIcon name="pluscircleo" size={24} color={Colors.darkGray} />
+            {isLabels && <Text style={styles.optionLabel}>Top up</Text>}
+          </TouchableOpacity>
+          <View style={styles.line} />
+          <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
+            <MaterialCommunityIcons
+              name="line-scan"
+              size={24}
+              color={Colors.darkGray}
+            />
+            {isLabels && <Text style={styles.optionLabel}>Transfer</Text>}
+          </TouchableOpacity>
+          <View style={styles.line} />
+          <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
+            <MaterialCommunityIcons
+              name="qrcode-plus"
+              size={24}
+              color={Colors.darkGray}
+            />
+            {isLabels && <Text style={styles.optionLabel}>Recieve</Text>}
+          </TouchableOpacity>
+        </Animated.View>
+      )}
     </Animated.View>
   );
 };
