@@ -29,8 +29,8 @@ interface IStore {
   assets: IAsset[];
   positions: types.Position[];
   airdrops: any[];
-  parcl: {balance: string};
-  kamino: {quantity: string; name: string}[];
+  parcl: {quantity: number; name: string};
+  kamino: {quantity: number; name: string}[];
   connection: Connection;
   isZetaConnected: '' | 'pending' | 'success' | 'failure';
   connectWallet: () => void;
@@ -61,7 +61,7 @@ const useAssets = create<IStore>((set, get) => ({
   assets: [],
   positions: [],
   airdrops: [],
-  parcl: {balance: '0'},
+  parcl: {name: 'PRCL', quantity: 0},
   kamino: [],
   connection: new Connection(RPC_ENDPOINT, {commitment: 'confirmed'}),
   isZetaConnected: '',
@@ -96,7 +96,11 @@ const useAssets = create<IStore>((set, get) => ({
     const account = get().activeAccount;
     const parcl = await getParclAirdrop(String(account?.publicKey));
     const kamino = await getKaminoAirdrop(String(account?.publicKey));
-    set(state => ({...state, parcl: parcl, kamino: kamino}));
+    set(state => ({
+      ...state,
+      parcl: {name: 'PRCL', quantity: parcl.balance},
+      kamino: kamino,
+    }));
   },
   getSolanaBalance: async () => {
     const account = get().activeAccount;

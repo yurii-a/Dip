@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
@@ -36,6 +36,13 @@ const PositionsSection = () => {
       connectZetaMarkets(activeAccount);
     }
   }
+  function getImage(name: string) {
+    return name === 'SOL'
+      ? require('../../assets/img/sol.png')
+      : name === 'JUP'
+      ? require('../../assets/img/jup.png')
+      : require('../../assets/img/etherium.png');
+  }
 
   return (
     <View style={styles.assetsSection}>
@@ -57,19 +64,19 @@ const PositionsSection = () => {
         )}
         {positions.map(item => (
           <TouchableOpacity key={item.asset} style={styles.blockItem}>
-            {/* <Image
+            <Image
               resizeMode="contain"
-              source={{uri: item.img}}
+              source={getImage(item.asset)}
               style={styles.image}
-            /> */}
+            />
             <View>
-              <Text style={styles.name}>{item.asset} </Text>
+              <Text style={styles.name}> 20X SHORT </Text>
               <Text style={styles.label}>
-                {item.costOfTrades} cost of trades
+                {+item.costOfTrades.toFixed(2)} {item.asset}
               </Text>
             </View>
             <View style={styles.open}>
-              <Text style={styles.total}>+${item.size} size</Text>
+              <Text style={styles.total}>${item.costOfTrades}</Text>
               <Icon name="chevron-right" size={20} color={Colors.titleText} />
             </View>
           </TouchableOpacity>

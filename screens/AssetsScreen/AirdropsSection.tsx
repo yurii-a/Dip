@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
@@ -9,13 +16,12 @@ const AirdropsSection = () => {
   useEffect(() => {
     getAirdrops();
   }, [getAirdrops]);
-  const newData = [
-    {
-      name: 'parcl',
-      quantity: parcl.balance,
-    },
-    ...kamino,
-  ];
+  const icons = (name: string): {[key: string]: ImageSourcePropType} => {
+    return name === 'PRCL'
+      ? require('../../assets/img/parcl.png')
+      : require('../../assets/img/kamino.png');
+  };
+  const airdrops = [parcl, ...kamino];
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
@@ -23,18 +29,19 @@ const AirdropsSection = () => {
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
       <View style={styles.block}>
-        {newData.map(item => (
+        {airdrops.map(item => (
           <TouchableOpacity key={item.name} style={styles.blockItem}>
             <Image
               resizeMode="contain"
-              source={require(`./../../assets/img/etherium.png`)}
+              source={icons(item.name)}
               style={styles.image}
             />
             <Text style={styles.label}>{item.name}</Text>
             <View style={styles.prices}>
               <Text style={styles.total}>
-                Balance: {Number(item.quantity).toFixed(2)}
+                {Number(item.quantity).toFixed(2)} pts
               </Text>
+              <Text style={styles.status}>Claim</Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -46,6 +53,14 @@ const AirdropsSection = () => {
 export default AirdropsSection;
 
 const styles = StyleSheet.create({
+  status: {
+    padding: 4,
+    paddingLeft: 20,
+    paddingRight: 20,
+    color: 'white',
+    backgroundColor: Colors.purpleDark,
+    borderRadius: 100,
+  },
   assetsSection: {
     marginBottom: 28,
   },
@@ -73,7 +88,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginRight: 11,
-    overflow: 'visible',
+    borderRadius: 100,
+    overflow: 'hidden',
   },
   label: {
     color: 'white',
@@ -90,18 +106,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     marginRight: 16,
-  },
-  percents: {
-    backgroundColor: Colors.purpleDark,
-    color: 'white',
-    marginRight: 4,
-    borderRadius: 100,
-    textAlign: 'center',
-    justifyContent: 'center',
-    padding: 2,
-    paddingLeft: 8,
-    paddingRight: 8,
-    fontSize: 14,
-    width: 80,
   },
 });

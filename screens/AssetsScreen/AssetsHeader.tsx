@@ -1,19 +1,45 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View, Animated} from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
 import {useNavigation} from '@react-navigation/native';
+import {alignType, flexType} from './AssetsScreen';
+interface HeaderProps {
+  height: Animated.AnimatedInterpolation<string | number>;
+  paddingTop: Animated.AnimatedInterpolation<string | number>;
+  marginBottom: Animated.AnimatedInterpolation<string | number>;
+  bottom: Animated.AnimatedInterpolation<string | number>;
+  flexDirection: flexType;
+  alignItems: alignType;
+  isLabels: boolean;
+}
 
-const AssetsHeader = () => {
+const AssetsHeader: React.FC<HeaderProps> = ({
+  height,
+  paddingTop,
+  flexDirection,
+  alignItems,
+  marginBottom,
+  bottom,
+  isLabels,
+}) => {
   const navigation = useNavigation();
   const {totalBalance} = useAssets();
 
   return (
-    <View style={styles.headerContainer}>
-      <View style={styles.headerNavigation}>
+    <Animated.View
+      style={[
+        styles.headerContainer,
+        {height: height, flexDirection, alignItems},
+      ]}>
+      <Animated.View
+        style={[
+          styles.headerNavigation,
+          {marginTop: paddingTop, marginBottom: marginBottom},
+        ]}>
         <TouchableOpacity style={styles.navIcon}>
           <Icon
             name="chevron-left"
@@ -23,13 +49,15 @@ const AssetsHeader = () => {
           />
         </TouchableOpacity>
         <Text style={styles.navMenuText}>DIP</Text>
-      </View>
-      <Text style={styles.balance}>${totalBalance.toFixed(2)}</Text>
+      </Animated.View>
+      <Animated.Text style={[styles.balance, {}]}>
+        ${totalBalance.toFixed(2)}
+      </Animated.Text>
 
-      <View style={styles.options}>
+      <Animated.View style={[styles.options, {bottom}]}>
         <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
           <AntIcon name="pluscircleo" size={24} color={Colors.darkGray} />
-          <Text style={styles.optionLabel}>Top up</Text>
+          {isLabels && <Text style={styles.optionLabel}>Top up</Text>}
         </TouchableOpacity>
         <View style={styles.line} />
         <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
@@ -38,7 +66,7 @@ const AssetsHeader = () => {
             size={24}
             color={Colors.darkGray}
           />
-          <Text style={styles.optionLabel}>Transfer</Text>
+          {isLabels && <Text style={styles.optionLabel}>Transfer</Text>}
         </TouchableOpacity>
         <View style={styles.line} />
         <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
@@ -47,10 +75,10 @@ const AssetsHeader = () => {
             size={24}
             color={Colors.darkGray}
           />
-          <Text style={styles.optionLabel}>Recieve</Text>
+          {isLabels && <Text style={styles.optionLabel}>Recieve</Text>}
         </TouchableOpacity>
-      </View>
-    </View>
+      </Animated.View>
+    </Animated.View>
   );
 };
 
@@ -58,6 +86,8 @@ export default AssetsHeader;
 
 const styles = StyleSheet.create({
   headerContainer: {
+    position: 'absolute',
+    width: '100%',
     height: 205,
     paddingLeft: 24,
     paddingRight: 24,
@@ -65,20 +95,22 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     marginBottom: 45,
+    zIndex: 100,
+    justifyContent: 'space-between',
+  },
+  navMenuText: {
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'Bebas Neue',
+    textTransform: 'uppercase',
   },
   headerNavigation: {
-    marginTop: 50,
     marginBottom: 26,
     flexDirection: 'row',
     alignItems: 'center',
   },
   navIcon: {
     marginRight: 18,
-  },
-  navMenuText: {
-    color: 'white',
-    fontSize: 20,
-    textTransform: 'uppercase',
   },
   balance: {
     color: 'white',
@@ -90,6 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    minWidth: 160,
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 16,
@@ -108,4 +141,3 @@ const styles = StyleSheet.create({
     color: Colors.darkGray,
   },
 });
-

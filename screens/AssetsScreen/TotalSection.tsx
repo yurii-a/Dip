@@ -35,7 +35,7 @@ const TotalSection = () => {
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
-        <Text style={styles.titleText}>ASSETS</Text>
+        <Text style={styles.titleText}>TOTAL WEALTH</Text>
         <Icon name="chevron-right" size={20} color={Colors.titleText} />
       </TouchableOpacity>
 
