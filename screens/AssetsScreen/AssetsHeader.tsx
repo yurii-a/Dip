@@ -58,7 +58,7 @@ const AssetsHeader: React.FC<HeaderProps> = ({
         <Animated.View style={[styles.options, {bottom}]}>
           <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
             <AntIcon name="pluscircleo" size={24} color={Colors.darkGray} />
-            {isLabels && <Text style={styles.optionLabel}>Top up</Text>}
+            <Text style={styles.optionLabel}>Top up</Text>
           </TouchableOpacity>
           <View style={styles.line} />
           <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
@@ -67,7 +67,7 @@ const AssetsHeader: React.FC<HeaderProps> = ({
               size={24}
               color={Colors.darkGray}
             />
-            {isLabels && <Text style={styles.optionLabel}>Transfer</Text>}
+            <Text style={styles.optionLabel}>Transfer</Text>
           </TouchableOpacity>
           <View style={styles.line} />
           <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
@@ -76,9 +76,12 @@ const AssetsHeader: React.FC<HeaderProps> = ({
               size={24}
               color={Colors.darkGray}
             />
-            {isLabels && <Text style={styles.optionLabel}>Recieve</Text>}
+            <Text style={styles.optionLabel}>Recieve</Text>
           </TouchableOpacity>
         </Animated.View>
+      )}
+      {!isLabels && (
+        <Icon name="menu" style={{paddingLeft: 30}} size={32} color="white" />
       )}
     </Animated.View>
   );

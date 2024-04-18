@@ -1,5 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Dimensions, View, StatusBar, Animated} from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  Animated,
+  SafeAreaView,
+  View,
+} from 'react-native';
 import Colors from '../../styles/Colours';
 import AssetsHeader from './AssetsHeader';
 import TotalSection from './TotalSection';
@@ -68,8 +74,7 @@ const AssetsScreen = () => {
     return () => scrollY.removeListener(id);
   }, [scrollY]);
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
       <AssetsHeader
         height={headerHeight}
         paddingTop={paddingTop}
@@ -80,17 +85,20 @@ const AssetsScreen = () => {
         isLabels={isLabels}
       />
       <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollY}}}],
           {useNativeDriver: false},
         )}
         style={styles.mainContent}>
+        <View style={{height: 260}}></View>
+
         <TotalSection />
         <AirdropsSection />
         <PositionsSection />
       </Animated.ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 export default AssetsScreen;
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
     height: height,
   },
   mainContent: {
-    paddingTop: 260,
+    // PaddingTop: 260,
     paddingLeft: 24,
     paddingRight: 24,
     paddingBottom: 18,

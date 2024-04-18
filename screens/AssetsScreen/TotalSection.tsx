@@ -57,22 +57,60 @@ const TotalSection = () => {
           </TouchableOpacity>
         ))}
       </View>
-      {/* <View style={styles.block}>
-        {[solana, ...assets].map(item => (
-          <TouchableOpacity
-            key={item?.title}
-            style={styles.blockItem}
-            // onPress={() => HandlePress(item.title)}
-          >
-            <Image source={{uri: item.image}} style={styles.image} />
+      <View style={styles.block}>
+        {[coins, ...data].map(item => (
+          <TouchableOpacity key={item.title} style={styles.blockItem}>
+            <View style={styles.icon}>
+              <Icon name="upload" size={20} color={Colors.darkGray} />
+            </View>
             <Text style={styles.label}>{item.title}</Text>
             <View style={styles.prices}>
-              <Text style={styles.quantity}>{item.balance.toFixed(3)}</Text>
-              <Text style={styles.total}>${item.totalPrice.toFixed(2)}</Text>
+              <Text style={styles.total}>
+                $ {Number(item.total).toFixed(2)}
+              </Text>
+              <View style={styles.percents}>
+                <Text style={{color: 'white'}}>{item.percents}</Text>
+              </View>
             </View>
           </TouchableOpacity>
         ))}
-      </View> */}
+      </View>
+      <View style={styles.block}>
+        {[coins, ...data].map(item => (
+          <TouchableOpacity key={item.title} style={styles.blockItem}>
+            <View style={styles.icon}>
+              <Icon name="upload" size={20} color={Colors.darkGray} />
+            </View>
+            <Text style={styles.label}>{item.title}</Text>
+            <View style={styles.prices}>
+              <Text style={styles.total}>
+                $ {Number(item.total).toFixed(2)}
+              </Text>
+              <View style={styles.percents}>
+                <Text style={{color: 'white'}}>{item.percents}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.block}>
+        {[coins, ...data].map(item => (
+          <TouchableOpacity key={item.title} style={styles.blockItem}>
+            <View style={styles.icon}>
+              <Icon name="upload" size={20} color={Colors.darkGray} />
+            </View>
+            <Text style={styles.label}>{item.title}</Text>
+            <View style={styles.prices}>
+              <Text style={styles.total}>
+                $ {Number(item.total).toFixed(2)}
+              </Text>
+              <View style={styles.percents}>
+                <Text style={{color: 'white'}}>{item.percents}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
