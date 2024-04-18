@@ -167,8 +167,8 @@ export async function getSolanaBalance(
   return fetchedBalance / 1e9;
 }
 
-export async function getKaminoAirdrop(address: string) {
-  const url = `https://api.hubbleprotocol.io/v2/airdrop/users/${address}/allocations?source=Season1`;
+export async function getKaminoAirdrop(wallet: string) {
+  const url = `https://api.hubbleprotocol.io/v2/airdrop/users/${wallet}/allocations?source=Season1`;
   try {
     const response = await axios.get(url);
     const total = response.data.reduce((total, item) => {
@@ -186,8 +186,8 @@ export async function getKaminoAirdrop(address: string) {
   }
 }
 
-export async function getParclAirdrop(address: string) {
-  const url = `https://app.parcl.co/api/allocation/${address}`;
+export async function getParclAirdrop(wallet: string) {
+  const url = `https://app.parcl.co/api/allocation/${wallet}`;
   try {
     const response = await axios.get(url);
     return response.data;
@@ -197,8 +197,8 @@ export async function getParclAirdrop(address: string) {
   }
 }
 
-export async function getDriftAirdrop(address: string) {
-  const url = `https://app.drift.trade/api/points-drop?authority=${address}&bust`;
+export async function getDriftAirdrop(wallet: string) {
+  const url = `https://app.drift.trade/api/points-drop?authority=${wallet}&bust`;
   try {
     const response = await axios.get(url);
     return response.data.data.latestDrop.authorityScore;

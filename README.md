@@ -22,13 +22,13 @@ This React Native dApp is only fully functional on Android.
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/solana-mobile/solana-mobile-dapp-scaffold/assets/18451967/3d83d3dc-ab65-4a2c-881d-8a229f34e392" alt="Scaffold dApp Screenshot 1" width=300 />
+      <img src="assets/dip_demo0.png" alt="Scaffold dApp Screenshot 1" width=300 />
     </td>
     <td align="center">
-      <img src="https://github.com/solana-mobile/solana-mobile-dapp-scaffold/assets/18451967/2fd69bd4-834d-45e1-8c7a-f80b5b576c96" alt="Scaffold dApp Screenshot 3" width=300 />
+      <img src="assets/dip_demo1.png" alt="Scaffold dApp Screenshot 3" width=300 />
     </td>
     <td align="center">
-      <img src="https://github.com/solana-mobile/solana-mobile-dapp-scaffold/assets/18451967/cdd93c12-d9ff-4739-81af-92da5b90303a" alt="Scaffold dApp Screenshot 2" width=300 />
+      <img src="assets/dip_demo2.png" alt="Scaffold dApp Screenshot 2" width=300 />
     </td>
   </tr>
 </table>
@@ -43,19 +43,12 @@ Follow the guide to make sure you:
 - install an MWA compliant wallet app on your device/emulator.
    
 ## Usage
-1. Initialize project template
-```
-npx react-native init MySolanaDapp --template https://github.com/solana-mobile/solana-mobile-dapp-scaffold.git
-```
-2. Install dependencies
+1. Install dependencies
 - `yarn install` or `npm install`
-3. Launch the app on your Android device/emulator
+2. Launch the app on your Android device/emulator
 - `npx react-native run-android`
 
 ## Troubleshooting
-  
-- `TypeError: cli.init is not a function`: This during template initialization means you have an old version of React Native CLI.
-This template only works with the new CLI. You can uninstall and reinstall it as directed [here](https://stackoverflow.com/questions/72768245/typeerror-cli-init-is-not-a-function-for-react-native).
 
 - `Looks like your iOS environment is not properly set`: You can ignore this during template initialization and build the Android app as normal. This template is only compatible with Android.
 
