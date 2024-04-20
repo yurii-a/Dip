@@ -19,7 +19,7 @@ const DynamicHeader = () => {
 
   const headerHeight = scrollY.interpolate({
     inputRange: [0, 135],
-    outputRange: [205, 100],
+    outputRange: [205, 60],
     extrapolate: 'clamp',
   });
   const paddingTop = scrollY.interpolate({
@@ -92,7 +92,7 @@ const AssetsScreen = () => {
           {useNativeDriver: false},
         )}
         style={styles.mainContent}>
-        <View style={{height: 260}}></View>
+        <View style={{height: 240}}></View>
 
         <TotalSection />
         <AirdropsSection />
@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
     // PaddingTop: 260,
     paddingLeft: 24,
     paddingRight: 24,
-    paddingBottom: 18,
+    // paddingBottom: 18,
   },
 });

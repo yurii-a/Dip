@@ -95,18 +95,27 @@ const useAssets = create<IStore>((set, get) => ({
     if (account === null) {
       return;
     }
+
+    const airdrops: Airdrop[] = [];
     const wallet = account.publicKey.toString();
+
     const parcl = await getParclAirdrop(wallet);
-    const kamino_total = await getKaminoAirdrop(wallet);
+    const kamino_tokens = await getKaminoAirdrop(wallet);
     const drift_total = await getDriftAirdrop(wallet);
+
+    if (parcl.allocation > 0) {
+      airdrops.push(Airdrop.createParcl(parcl.allocation));
+    }
+    if (kamino_tokens > 0) {
+      airdrops.push(Airdrop.createKamino(kamino_tokens));
+    }
+    if (drift_total > 0) {
+      airdrops.push(Airdrop.createDrift(drift_total));
+    }
 
     set(state => ({
       ...state,
-      airdrops: [
-        Airdrop.createParcl(parcl.allocation),
-        Airdrop.createKamino(kamino_total),
-        Airdrop.createDrift(drift_total),
-      ],
+      airdrops: airdrops,
     }));
   },
   getSolanaBalance: async () => {

@@ -1,15 +1,8 @@
 import React, {useEffect} from 'react';
-import {
-  Button,
-  // FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Image,
-} from 'react-native';
+import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
 import Colors from '../styles/Colours';
 import useAssets from '../store';
+import Button from 'react-native-ui-lib/src/components/button';
 export default function MainScreen({navigation}: {navigation: any}) {
   const {activeAccount, connectWallet, getAirdrops, getSolanaBalance} =
     useAssets();
@@ -27,21 +20,31 @@ export default function MainScreen({navigation}: {navigation: any}) {
           <Text style={styles.title}>Get started with DIP</Text>
           <Image
             resizeMode={'contain'}
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-              width: '80%',
-              height: 300,
-              alignSelf: 'center',
-              marginBottom: 100,
-            }}
+            style={styles.illustration}
             source={require('../assets/img/intro_bg.png')}
           />
         </View>
         <View>
-          <Text style={styles.inputLabel}>Enter your wallet address</Text>
-          <TextInput style={styles.input} />
-          <Text style={styles.inputLabel}>or</Text>
-          <Button title="Connect wallet" onPress={connectWallet} />
+          <Text style={styles.inputLabel}>Enter your wallet addresses</Text>
+          <TextInput multiline style={styles.input} numberOfLines={3}>
+            <Text>
+              FvgywbgW4L9n6iPqi5cxCBJCu3WJB9MW21znyBnWncMt{'\n'}
+              toly.sol
+            </Text>
+          </TextInput>
+          <Button
+            label="Add"
+            backgroundColor={Colors.purpleDark}
+            color={Colors.white}
+          />
+
+          <Text style={styles.divider}>– or –</Text>
+          <Button
+            label="Connect wallet"
+            onPress={connectWallet}
+            backgroundColor={Colors.purpleDark}
+            color={Colors.white}
+          />
         </View>
       </View>
     </>
@@ -53,8 +56,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  illustration: {
+    width: '80%',
+    height: 300,
+    alignSelf: 'center',
+    marginBottom: 100,
+  },
   title: {
-    color: '#fff',
+    color: Colors.white,
     fontSize: 40,
     fontWeight: '700',
     textAlign: 'center',
@@ -71,7 +80,7 @@ const styles = StyleSheet.create({
     paddingRight: 12,
   },
   addressText: {
-    color: 'black',
+    color: Colors.black,
     marginLeft: 12,
   },
   wallets: {
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
   accountsTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: Colors.black,
     marginBottom: 12,
   },
   mainBalance: {
@@ -114,17 +123,32 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   inputLabel: {
-    color: '#fff',
-    fontSize: 14,
+    color: Colors.white,
+    fontFamily: 'Asap',
+    fontSize: 16,
     fontWeight: '500',
-    textAlign: 'center',
+    textAlign: 'left',
   },
-  input: {
-    backgroundColor: '#ffffff',
-    color: Colors.purpleDark,
-    opacity: 0.3,
-    fontSize: 12,
+
+  divider: {
+    color: Colors.white,
+    fontSize: 16,
+    fontFamily: 'Asap',
     fontWeight: '500',
     textAlign: 'center',
+    marginTop: 12,
+    marginBottom: 12,
+  },
+
+  input: {
+    backgroundColor: Colors.grey,
+    color: Colors.black,
+    fontSize: 12,
+    fontFamily: 'Asap',
+    fontWeight: '500',
+    textAlign: 'center',
+    marginTop: 12,
+    marginBottom: 12,
+    borderRadius: 10,
   },
 });

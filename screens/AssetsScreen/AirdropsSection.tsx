@@ -3,6 +3,7 @@ import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
+import formatCurrency from '../../util/CurrencyUtils';
 
 const AirdropsSection = () => {
   const {airdrops, getAirdrops} = useAssets();
@@ -24,9 +25,18 @@ const AirdropsSection = () => {
               source={item.logo}
               style={styles.image}
             />
-            <Text style={styles.label}>{item.name}</Text>
+            <View>
+              <Text style={styles.label}>{item.name}</Text>
+              <Text style={styles.amount}>
+                {Number(item.tokens).toFixed(0) + ' ' + item.ticker}
+              </Text>
+            </View>
             <View style={styles.prices}>
-              <Text style={styles.total}>{Number(item.tokens).toFixed(0)}</Text>
+              <Text style={styles.total}>
+                {item?.getValue() != null
+                  ? formatCurrency(item.getValue()!)
+                  : ''}
+              </Text>
               <Text style={styles.status}>Claim</Text>
             </View>
           </TouchableOpacity>
@@ -41,11 +51,12 @@ export default AirdropsSection;
 const styles = StyleSheet.create({
   status: {
     padding: 4,
-    paddingLeft: 20,
-    paddingRight: 20,
-    color: 'white',
+    paddingLeft: 10,
+    paddingRight: 10,
+    color: Colors.white,
     backgroundColor: Colors.purpleDark,
-    borderRadius: 100,
+    borderRadius: 10,
+    fontFamily: 'Asap',
   },
   assetsSection: {
     marginBottom: 28,
@@ -75,12 +86,21 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 11,
     borderRadius: 100,
+    backgroundColor: Colors.grey,
     overflow: 'hidden',
   },
   label: {
-    color: 'white',
+    color: Colors.white,
+    fontFamily: 'Asap',
     fontSize: 16,
+    fontWeight: '600',
+  },
+  amount: {
+    color: Colors.white,
+    fontFamily: 'Asap',
+    fontSize: 14,
     fontWeight: '500',
+    opacity: 0.8,
   },
   prices: {
     marginLeft: 'auto',
@@ -88,7 +108,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   total: {
-    color: 'white',
+    color: Colors.white,
+    fontFamily: 'Asap',
     fontSize: 18,
     fontWeight: '400',
     marginRight: 16,

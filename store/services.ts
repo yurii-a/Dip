@@ -43,7 +43,7 @@ export async function getWallet() { //Here we can connect solana wallets that we
       const publicKey = new PublicKey(toUint8Array(item.address));
       return {
         ...item,
-        label: item.label ?? 'Default label',
+        label: item.label ?? 'My wallet',
         publicKey,
       };
     }),
@@ -58,8 +58,7 @@ export async function GetSolanaBalance(account: IAccount) {
 }
 export async function getAssets(address: string): Promise<{assets: IAsset[]; solana: IAsset}> {//get balances from helius api using our solana wallet address
 
-  const url =
-    'https://mainnet.helius-rpc.com/?api-key=fa9b9644-4d07-4b1e-98ed-ab113cfcdd25';
+  const url = RPC_ENDPOINT;
   const requestData = {
     jsonrpc: '2.0',
     id: '',
@@ -98,7 +97,7 @@ export async function getAssets(address: string): Promise<{assets: IAsset[]; sol
   return {assets: formattedResults, solana: solBalance};
 }
 
-export async function getZetaWallet(activeAccount: IAccount | null) {
+export async function getZetaWallet(account: IAccount) {
   const zetaWallet = {
     signTransaction: async (transaction: Transaction) => {
       return transact(async (wallet: Web3MobileWallet) => {
@@ -118,7 +117,7 @@ export async function getZetaWallet(activeAccount: IAccount | null) {
       });
     },
     get publicKey() {
-      return activeAccount!.publicKey;
+      return account.publicKey;
     },
   } as ZetaWallet;
   return zetaWallet;
@@ -140,13 +139,13 @@ export async function connectZetaMarkets(account: IAccount) {
     return 'failure';
   }
 }
-export async function getPositions(activeAccount: IAccount | null) {
-  const zetaWallet = await getZetaWallet(activeAccount);
+export async function getPositions(account: IAccount) {
+  const zetaWallet = await getZetaWallet(account);
   const client = await CrossClient.load(connection, zetaWallet);
   await client.updateState();
-  const assetValues = Object.values(constants.Asset);
+  const assets = Object.values(constants.Asset);
 
-  const positionPromises = assetValues.map(async assetValue => {
+  const positionPromises = assets.map(async assetValue => {
     const positions = await client.getPositions(assetValue);
     return positions;
   });

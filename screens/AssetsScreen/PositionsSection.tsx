@@ -41,7 +41,7 @@ const PositionsSection = () => {
       ? require('../../assets/img/sol.png')
       : name === 'JUP'
       ? require('../../assets/img/jup.png')
-      : require('../../assets/img/etherium.png');
+      : require('../../assets/img/eth.png');
   }
 
   return (
@@ -52,14 +52,16 @@ const PositionsSection = () => {
       </TouchableOpacity>
       <View style={styles.block}>
         {isZetaConnected === 'pending' && (
-          <Text style={styles.connectStatus}>Connectiong zeta markets</Text>
+          <Text style={styles.connectStatus}>Connecting to Zeta Markets</Text>
         )}
         {isZetaConnected === 'failure' && (
           <TouchableOpacity
             style={styles.connectStatusContainer}
             onPress={reconnect}>
-            <Text style={styles.connectStatusFailed}>Connect is failed</Text>
-            <Text style={styles.connectStatusClick}>Click to reconnect</Text>
+            <Text style={styles.connectStatusFailed}>
+              Failed to fetch open positions
+            </Text>
+            <Text style={styles.connectStatusClick}>Try again</Text>
           </TouchableOpacity>
         )}
         {positions.map(item => (
@@ -70,7 +72,7 @@ const PositionsSection = () => {
               style={styles.image}
             />
             <View>
-              <Text style={styles.name}> 20X SHORT </Text>
+              <Text style={styles.name}>5X SHORT</Text>
               <Text style={styles.label}>
                 {+item.costOfTrades.toFixed(2)} {item.asset}
               </Text>
@@ -89,26 +91,23 @@ export default PositionsSection;
 
 const styles = StyleSheet.create({
   connectStatusClick: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 14,
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   connectStatusContainer: {
-    padding: 20,
+    padding: 12,
   },
   connectStatusFailed: {
-    color: '#ff483b',
-    fontSize: 20,
+    color: Colors.black,
+    fontSize: 14,
     marginBottom: 16,
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   connectStatus: {
-    padding: 20,
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    padding: 14,
+    color: Colors.white,
+    fontSize: 14,
     textAlign: 'center',
   },
   assetsSection: {
@@ -138,14 +137,16 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginRight: 11,
+    backgroundColor: Colors.grey,
+    borderRadius: 20,
     overflow: 'visible',
   },
   name: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 10,
   },
   label: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: '500',
   },
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   total: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: '400',
     marginRight: 6,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   },
   percents: {
     backgroundColor: Colors.green,
-    color: 'white',
+    color: Colors.white,
     marginRight: 4,
     borderRadius: 100,
     textAlign: 'center',

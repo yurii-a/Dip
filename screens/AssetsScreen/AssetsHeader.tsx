@@ -7,6 +7,7 @@ import Colors from '../../styles/Colours';
 import useAssets from '../../store';
 import {useNavigation} from '@react-navigation/native';
 import {alignType, flexType} from './AssetsScreen';
+import formatCurrency from '../../util/CurrencyUtils';
 interface HeaderProps {
   height: Animated.AnimatedInterpolation<string | number>;
   paddingTop: Animated.AnimatedInterpolation<string | number>;
@@ -51,21 +52,21 @@ const AssetsHeader: React.FC<HeaderProps> = ({
         <Text style={styles.navMenuText}>DIP</Text>
       </Animated.View>
       <Animated.Text style={[styles.balance, {}]}>
-        ${totalBalance.toFixed(2)}
+        {formatCurrency(totalBalance, true)}
       </Animated.Text>
 
       {isLabels && (
         <Animated.View style={[styles.options, {bottom}]}>
           <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
-            <AntIcon name="pluscircleo" size={24} color={Colors.darkGray} />
-            <Text style={styles.optionLabel}>Top up</Text>
+            <AntIcon name="pluscircleo" size={24} color={Colors.darkGrey} />
+            <Text style={styles.optionLabel}>Top Up</Text>
           </TouchableOpacity>
           <View style={styles.line} />
           <TouchableOpacity onPress={() => {}} style={styles.optionsItem}>
             <MaterialCommunityIcons
               name="line-scan"
               size={24}
-              color={Colors.darkGray}
+              color={Colors.darkGrey}
             />
             <Text style={styles.optionLabel}>Transfer</Text>
           </TouchableOpacity>
@@ -74,15 +75,15 @@ const AssetsHeader: React.FC<HeaderProps> = ({
             <MaterialCommunityIcons
               name="qrcode-plus"
               size={24}
-              color={Colors.darkGray}
+              color={Colors.darkGrey}
             />
-            <Text style={styles.optionLabel}>Recieve</Text>
+            <Text style={styles.optionLabel}>Receive</Text>
           </TouchableOpacity>
         </Animated.View>
       )}
-      {!isLabels && (
+      {/* {!isLabels && (
         <Icon name="menu" style={{paddingLeft: 30}} size={32} color="white" />
-      )}
+      )} */}
     </Animated.View>
   );
 };
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   navMenuText: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 20,
     fontFamily: 'Bebas Neue',
     textTransform: 'uppercase',
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     marginRight: 18,
   },
   balance: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 24,
     fontWeight: '600',
     textAlign: 'center',
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     minWidth: 160,
-    backgroundColor: 'white',
+    backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 16,
     bottom: -24,
@@ -143,6 +144,6 @@ const styles = StyleSheet.create({
   },
   optionLabel: {
     marginTop: 10,
-    color: Colors.darkGray,
+    color: Colors.darkGrey,
   },
 });

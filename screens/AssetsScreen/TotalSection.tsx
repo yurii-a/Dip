@@ -1,23 +1,33 @@
 import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
-const data: {title: string; total: string; percents: string}[] = [
+import formatCurrency from '../../util/CurrencyUtils';
+
+const data: {
+  icon: NodeRequire;
+  title: string;
+  total: number;
+  dailyChange: string;
+}[] = [
   {
-    title: 'NFTS',
-    total: '25000',
-    percents: '-6.33%',
+    icon: require('../../assets/img/ic_nft.png'),
+    title: 'NFTs',
+    total: 25000,
+    dailyChange: '-6.33%',
   },
   {
+    icon: require('../../assets/img/ic_trading.png'),
     title: 'Trading',
-    total: '5500',
-    percents: '+999%',
+    total: 5500,
+    dailyChange: '+999%',
   },
   {
+    icon: require('../../assets/img/ic_lending.png'),
     title: 'Lending',
-    total: '6500',
-    percents: '+0.21%',
+    total: 6500,
+    dailyChange: '+0.21%',
   },
 ];
 const TotalSection = () => {
@@ -28,9 +38,10 @@ const TotalSection = () => {
   const totalAssets = assets.reduce((acc, asset) => acc + asset.totalPrice, 0);
   console.log(totalAssets, 'total assets');
   const coins = {
+    icon: require('../../assets/img/ic_coins.png'),
     title: 'Coins',
     total: +totalAssets + solana.totalPrice,
-    percents: '+2.02%',
+    dailyChange: '+2.02%',
   };
   return (
     <View style={styles.assetsSection}>
@@ -42,16 +53,16 @@ const TotalSection = () => {
       <View style={styles.block}>
         {[coins, ...data].map(item => (
           <TouchableOpacity key={item.title} style={styles.blockItem}>
-            <View style={styles.icon}>
-              <Icon name="upload" size={20} color={Colors.darkGray} />
-            </View>
+            <Image
+              resizeMode="contain"
+              source={item.icon}
+              style={styles.image}
+            />
             <Text style={styles.label}>{item.title}</Text>
             <View style={styles.prices}>
-              <Text style={styles.total}>
-                $ {Number(item.total).toFixed(2)}
-              </Text>
-              <View style={styles.percents}>
-                <Text style={{color: 'white'}}>{item.percents}</Text>
+              <Text style={styles.total}>{formatCurrency(item.total)}</Text>
+              <View style={styles.dailyChange}>
+                <Text style={{color: 'white'}}>{item.dailyChange}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -66,7 +77,7 @@ export default TotalSection;
 const styles = StyleSheet.create({
   quantity: {
     fontSize: 18,
-    color: 'white',
+    color: Colors.white,
     marginRight: 10,
     fontWeight: 'bold',
   },
@@ -75,7 +86,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 100,
     paddingBottom: 2,
-    backgroundColor: 'white',
+    backgroundColor: Colors.grey,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 11,
@@ -85,8 +96,13 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 40,
     marginRight: 11,
+    backgroundColor: Colors.grey,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   assetsSection: {
+    marginTop: 28,
     marginBottom: 28,
   },
   title: {
@@ -110,7 +126,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    color: 'white',
+    fontFamily: 'Asap',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: '500',
   },
@@ -121,15 +138,14 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   total: {
-    color: 'white',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: '400',
     marginRight: 6,
     marginBottom: 2,
   },
-  percents: {
+  dailyChange: {
     backgroundColor: Colors.green,
-    color: 'white',
     marginRight: 4,
     borderRadius: 100,
     textAlign: 'center',
