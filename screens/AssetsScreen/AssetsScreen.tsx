@@ -95,8 +95,8 @@ const AssetsScreen = () => {
         <View style={{height: 240}}></View>
 
         <TotalSection />
-        <AirdropsSection />
         <PositionsSection />
+        <AirdropsSection />
       </Animated.ScrollView>
     </SafeAreaView>
   );

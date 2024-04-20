@@ -12,37 +12,41 @@ const AirdropsSection = () => {
   }, [getAirdrops]);
 
   return (
-    <View style={styles.assetsSection}>
-      <TouchableOpacity style={styles.title}>
-        <Text style={styles.titleText}>AIRDROPS</Text>
-        <Icon name="chevron-right" size={20} color={Colors.titleText} />
-      </TouchableOpacity>
-      <View style={styles.block}>
-        {airdrops.map(item => (
-          <TouchableOpacity key={item.name} style={styles.blockItem}>
-            <Image
-              resizeMode="contain"
-              source={item.logo}
-              style={styles.image}
-            />
-            <View>
-              <Text style={styles.label}>{item.name}</Text>
-              <Text style={styles.amount}>
-                {Number(item.tokens).toFixed(0) + ' ' + item.ticker}
-              </Text>
-            </View>
-            <View style={styles.prices}>
-              <Text style={styles.total}>
-                {item?.getValue() != null
-                  ? formatCurrency(item.getValue()!)
-                  : ''}
-              </Text>
-              <Text style={styles.status}>Claim</Text>
-            </View>
+    <>
+      {airdrops.length > 0 && (
+        <View style={styles.assetsSection}>
+          <TouchableOpacity style={styles.title}>
+            <Text style={styles.titleText}>AIRDROPS</Text>
+            <Icon name="chevron-right" size={20} color={Colors.titleText} />
           </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+          <View style={styles.block}>
+            {airdrops.map(item => (
+              <TouchableOpacity key={item.name} style={styles.blockItem}>
+                <Image
+                  resizeMode="contain"
+                  source={item.logo}
+                  style={styles.image}
+                />
+                <View>
+                  <Text style={styles.label}>{item.name}</Text>
+                  <Text style={styles.amount}>
+                    {Number(item.tokens).toFixed(0) + ' ' + item.ticker}
+                  </Text>
+                </View>
+                <View style={styles.prices}>
+                  <Text style={styles.total}>
+                    {item?.getValue() != null
+                      ? formatCurrency(item.getValue()!)
+                      : ''}
+                  </Text>
+                  <Text style={styles.status}>Claim</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 
