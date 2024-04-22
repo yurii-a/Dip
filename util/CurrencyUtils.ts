@@ -12,7 +12,7 @@ const formatCurrency = (
     style: 'currency',
     currency: 'USD',
     useGrouping: true, // This enables thousands grouping
-    minimumFractionDigits: 0,
+    minimumFractionDigits: showDecimals ? 2 : 0,
     maximumFractionDigits: showDecimals ? 2 : 0,
   });
 

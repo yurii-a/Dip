@@ -1,6 +1,5 @@
 import {create} from 'zustand';
-import {IAccount, IAsset, IWalletData} from './interfaces';
-import {types} from '@zetamarkets/sdk';
+import {IAccount, IAsset, IWalletData, OpenPosition} from './interfaces';
 
 import {
   connectZetaMarkets,
@@ -29,7 +28,7 @@ interface IStore {
   solana: IAsset;
   solanaBalance: number;
   assets: IAsset[];
-  positions: types.Position[];
+  positions: OpenPosition[];
   airdrops: Airdrop[];
   connection: Connection;
   isZetaConnected: '' | 'pending' | 'success' | 'failure';

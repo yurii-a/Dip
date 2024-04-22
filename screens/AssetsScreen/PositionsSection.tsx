@@ -3,6 +3,7 @@ import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
+import formatCurrency from '../../util/CurrencyUtils';
 
 const PositionsSection = () => {
   const {
@@ -52,7 +53,7 @@ const PositionsSection = () => {
       </TouchableOpacity>
       <View style={styles.block}>
         {isZetaConnected === 'pending' && (
-          <Text style={styles.connectStatus}>Connecting to Zeta Markets</Text>
+          <Text style={styles.connectStatus}>Connecting to markets</Text>
         )}
         {isZetaConnected === 'failure' && (
           <TouchableOpacity
@@ -68,17 +69,22 @@ const PositionsSection = () => {
           <TouchableOpacity key={item.asset} style={styles.blockItem}>
             <Image
               resizeMode="contain"
-              source={getImage(item.asset)}
+              source={getImage(item.asset.toUpperCase())}
               style={styles.image}
             />
             <View>
-              <Text style={styles.name}>5X SHORT</Text>
+              <Text style={styles.name}>
+                {item.size > 0 ? 'Long ' : 'Short '}
+                {Math.abs(item.size).toFixed(2)} {item.asset}
+              </Text>
               <Text style={styles.label}>
-                {+item.costOfTrades.toFixed(2)} {item.asset}
+                {/* {'Entry price: '} */}
+                {formatCurrency(item.entryPrice, true)} {'→'}
+                {formatCurrency(item.markPrice, true)}
               </Text>
             </View>
             <View style={styles.open}>
-              <Text style={styles.total}>${item.costOfTrades}</Text>
+              <Text style={styles.total}>{formatCurrency(item.pnl, true)}</Text>
               <Icon name="chevron-right" size={20} color={Colors.titleText} />
             </View>
           </TouchableOpacity>
@@ -108,7 +114,7 @@ const styles = StyleSheet.create({
     padding: 14,
     color: Colors.white,
     fontSize: 14,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   assetsSection: {
     marginBottom: 28,
@@ -143,11 +149,13 @@ const styles = StyleSheet.create({
   },
   name: {
     color: Colors.white,
-    fontSize: 10,
+    fontSize: 16,
+    fontFamily: 'Asap',
   },
   label: {
     color: Colors.white,
-    fontSize: 16,
+    fontSize: 12,
+    fontFamily: 'Asap',
     fontWeight: '500',
   },
   open: {

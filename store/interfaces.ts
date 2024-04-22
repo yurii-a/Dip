@@ -89,3 +89,17 @@ export interface IAsset {
   price: number;
   totalPrice: number;
 }
+
+export enum Dex {
+  ZETA = 'Zeta',
+  DRIFT = 'Drift',
+  PARCL = 'Parcl',
+}
+export interface OpenPosition {
+  asset: string;
+  exchange: Dex;
+  entryPrice: number;
+  markPrice: number;
+  size: number;
+  pnl: number;
+}
