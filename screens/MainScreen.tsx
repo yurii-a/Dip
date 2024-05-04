@@ -7,8 +7,8 @@ export default function MainScreen({navigation}: {navigation: any}) {
   const {activeAccount, connectWallet, getAirdrops, getAssets} = useAssets();
   useEffect(() => {
     if (activeAccount) {
-      getAssets();
-      getAirdrops();
+      // getAssets();
+      // getAirdrops();
       navigation.navigate('assets');
     }
   }, [activeAccount, getAirdrops, getAssets, navigation]);
