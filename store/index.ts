@@ -3,14 +3,13 @@ import {IAccount, IAsset, IWalletData, OpenPosition} from './interfaces';
 
 import {
   connectZetaMarkets,
-  getAssets,
   getDriftAirdrop,
   getKaminoAirdrop,
   getParclAirdrop,
   getPositions,
-  getSolanaBalance,
   getWallet,
 } from './services';
+import {fetchAssets} from './HeliusApi';
 import {Connection} from '@solana/web3.js';
 import {Airdrop} from './Airdrop';
 
@@ -25,8 +24,6 @@ interface IStore {
   wallet: IWalletData | null;
   activeAccount: IAccount | null;
   totalBalance: number;
-  solana: IAsset;
-  solanaBalance: number;
   assets: IAsset[];
   positions: OpenPosition[];
   airdrops: Airdrop[];
@@ -39,24 +36,12 @@ interface IStore {
   connectZetaMarkets: (account: IAccount) => void;
   getPositions: () => void;
   getAirdrops: () => void;
-  getSolanaBalance: () => void;
 }
 
 const useAssets = create<IStore>((set, get) => ({
   wallet: null,
   activeAccount: null,
   totalBalance: 0,
-  solana: {
-    id: '',
-    title: 'SOL',
-    image: 'https://logos-world.net/wp-content/uploads/2024/01/Solana-Logo.png',
-    owner: '',
-    tokenAddress: '',
-    balance: 0,
-    price: 0,
-    totalPrice: 0,
-  },
-  solanaBalance: 0,
   assets: [],
   positions: [],
   airdrops: [],
@@ -79,14 +64,18 @@ const useAssets = create<IStore>((set, get) => ({
   },
   getAssets: async () => {
     const account = get().activeAccount;
-    const {assets, solana} = await getAssets(String(account?.publicKey));
-    const totalAssets =
-      solana.totalPrice + assets.reduce((a, i) => a + i.totalPrice, 0);
+    if (account == null) {
+      //TODO add logic when account is null, e.g. take to auth screen
+      console.error('No active account found. Cant fetch assets');
+      return;
+    }
+    const publicKey = String(account.publicKey);
+    const {assets, solana, totalBalance} = await fetchAssets(publicKey);
     set(state => ({
       ...state,
       assets: assets,
       solana: solana,
-      totalBalance: totalAssets,
+      totalBalance: totalBalance,
     }));
   },
   getAirdrops: async () => {
@@ -117,11 +106,6 @@ const useAssets = create<IStore>((set, get) => ({
       airdrops: airdrops,
     }));
   },
-  getSolanaBalance: async () => {
-    const account = get().activeAccount;
-    const balance = await getSolanaBalance(account);
-    set(state => ({...state, solanaBalance: balance}));
-  },
   connectZetaMarkets: async account => {
     const res = await connectZetaMarkets(account);
     set(state => ({...state, isZetaConnected: res}));
@@ -129,6 +113,9 @@ const useAssets = create<IStore>((set, get) => ({
 
   getPositions: async () => {
     const account = get().activeAccount;
+    if (account == null) {
+      return;
+    }
     const positions = await getPositions(account);
     set(state => ({...state, positions: positions}));
   },

@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
     // PaddingTop: 260,
     paddingLeft: 24,
     paddingRight: 24,
-    // paddingBottom: 18,
+    paddingBottom: 24,
   },
 });

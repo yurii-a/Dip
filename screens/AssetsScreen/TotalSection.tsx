@@ -31,16 +31,15 @@ const data: {
   },
 ];
 const TotalSection = () => {
-  const {assets, solana} = useAssets();
+  const {totalBalance} = useAssets();
   // function HandlePress(title: string) {
   //   return navigation.navigate(title.toLowerCase());
   // }
-  const totalAssets = assets.reduce((acc, asset) => acc + asset.totalPrice, 0);
-  console.log(totalAssets, 'total assets');
+  console.log(totalBalance, 'total assets');
   const coins = {
     icon: require('../../assets/img/ic_coins.png'),
     title: 'Coins',
-    total: +totalAssets + solana.totalPrice,
+    total: totalBalance,
     dailyChange: '+2.02%',
   };
   return (
@@ -60,7 +59,9 @@ const TotalSection = () => {
             />
             <Text style={styles.label}>{item.title}</Text>
             <View style={styles.prices}>
-              <Text style={styles.total}>{formatCurrency(item.total)}</Text>
+              <Text style={styles.total}>
+                {formatCurrency(item.total, true)}
+              </Text>
               <View style={styles.dailyChange}>
                 <Text style={{color: 'white'}}>{item.dailyChange}</Text>
               </View>

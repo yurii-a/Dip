@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {PublicKey, Transaction} from '@solana/web3.js';
+import {LAMPORTS_PER_SOL, PublicKey, Transaction} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
 import axios from 'axios';
 import {
@@ -15,7 +15,7 @@ import {
   transact,
   Web3MobileWallet,
 } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
-import {Dex, IAccount, IAsset, IResultItem, OpenPosition} from './interfaces';
+import {Dex, IAccount, IAsset, HeliusAsset, OpenPosition} from './interfaces';
 import {useAuthorizationStore} from './useAuthorizationStore';
 import useAssets from './index';
 export const APP_IDENTITY = {
@@ -49,50 +49,10 @@ export async function getWallet() { //Here we can connect solana wallets that we
   return wallet;
 }
 
-export async function GetSolanaBalance(account: IAccount) {
+export async function getSolanaWalletBalance(account: IAccount) {
   const publicKey = new PublicKey(toUint8Array(account.address));
   const fetchedBalance = await connection.getBalance(publicKey);
-  return fetchedBalance / 1e9;
-}
-export async function getAssets(address: string): Promise<{assets: IAsset[]; solana: IAsset}> {//get balances from helius api using our solana wallet address
-
-  const url = RPC_ENDPOINT;
-  const requestData = {
-    jsonrpc: '2.0',
-    id: '',
-    method: 'getAssetsByOwner',
-    params: {
-      ownerAddress: address,
-      displayOptions: {
-        showFungible: true,
-        showNativeBalance: true,
-      },
-    },
-  };
-  const response = await axios.post(url, requestData);
-  const formattedResults = response.data.result.items.map((item: IResultItem) => {
-    return {
-      id: item.id,
-      title: item.token_info.symbol,
-      image: item.content.links.image,
-      owner: item.ownership.owner,
-      tokenAddress: item.token_info.associated_token_address,
-      balance: item.token_info.balance / 10 ** item.token_info.decimals,
-      price: item.token_info.price_info.price_per_token,
-      totalPrice: item.token_info.price_info.total_price,
-    };
-  });
-  const solBalance = {
-    id: '1',
-    title: 'SOL',
-    image: 'https://logos-world.net/wp-content/uploads/2024/01/Solana-Logo.png',
-    owner: activeAccount?.address || '',
-    tokenAddress: activeAccount?.address || '',
-    balance: response.data.result.nativeBalance.lamports / 1e9,
-    price: response.data.result.nativeBalance.price_per_sol,
-    totalPrice: response.data.result.nativeBalance.total_price,
-  };
-  return {assets: formattedResults, solana: solBalance};
+  return fetchedBalance / LAMPORTS_PER_SOL;
 }
 
 export async function getZetaWallet(account: IAccount) {
@@ -127,7 +87,7 @@ export async function connectZetaMarkets(account: IAccount) {
     Network.MAINNET,
     connection,
     utils.defaultCommitment(),
-    100,
+    10,
     false,
   );
   try {
@@ -154,31 +114,23 @@ export async function getPositions(account: IAccount) {
   const assets = Object.values(constants.Asset);
 
   const positionPromises = assets.map(async assetValue => {
-    const positions = await client.getPositions(assetValue);
+    const positions = client.getPositions(assetValue);
     return positions;
   });
   const res = await Promise.all(positionPromises);
 
-  const accountState = await client.getAccountState();
+  const accountState = client.getAccountState();
   const positions = res
     .filter(item => item !== undefined && item.length > 0)
     .flat();
 
   const markPositions = Promise.all(positions.map(async (item) => {
-    const markPrice = await Exchange.getMarkPrice(item.asset);
+    const markPrice = Exchange.getMarkPrice(item.asset);
     const position = mapZetaPosition(item, accountState, markPrice);
     return position;
   }));
 
   return markPositions;
-}
-export async function getSolanaBalance(
-  account: IAccount | null,
-): Promise<number> {
-  if (!account) {return 0;}
-  const publicKey = new PublicKey(toUint8Array(account.address));
-  const fetchedBalance = await connection.getBalance(publicKey);
-  return fetchedBalance / 1e9;
 }
 
 export async function getKaminoAirdrop(wallet: string) {

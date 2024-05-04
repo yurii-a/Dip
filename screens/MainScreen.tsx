@@ -4,15 +4,14 @@ import Colors from '../styles/Colours';
 import useAssets from '../store';
 import Button from 'react-native-ui-lib/src/components/button';
 export default function MainScreen({navigation}: {navigation: any}) {
-  const {activeAccount, connectWallet, getAirdrops, getSolanaBalance} =
-    useAssets();
+  const {activeAccount, connectWallet, getAirdrops, getAssets} = useAssets();
   useEffect(() => {
     if (activeAccount) {
-      getSolanaBalance();
+      getAssets();
       getAirdrops();
       navigation.navigate('assets');
     }
-  }, [activeAccount, getSolanaBalance, getAirdrops, navigation]);
+  }, [activeAccount, getAirdrops, getAssets, navigation]);
   return (
     <>
       <View style={styles.mainContainer}>
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: Colors.grey,
     color: Colors.black,
-    fontSize: 12,
+    fontSize: 16,
     fontFamily: 'Asap',
     fontWeight: '500',
     textAlign: 'center',

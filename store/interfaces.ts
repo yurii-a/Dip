@@ -47,7 +47,7 @@ interface TokenInfo {
   token_program: string;
 }
 
-export interface IResultItem {
+export interface HeliusAsset {
   authorities: any[];
   burnt: boolean;
   compression: Compression;
@@ -60,7 +60,7 @@ export interface IResultItem {
   ownership: Ownership;
   royalty: Royalty;
   supply: any; // This will depend on the actual data type
-  token_info: TokenInfo;
+  token_info: TokenInfo | null;
 }
 export interface IAccount {
   address: string;
