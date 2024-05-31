@@ -48,6 +48,12 @@ Follow the guide to make sure you:
 2. Launch the app on your Android device/emulator
 - `npx react-native run-android`
 
+## Release
+1. Assemble app in release mode
+`npx react-native run-android --mode release`
+2. Deploy to dApp Store
+https://docs.solanamobile.com/dapp-publishing/overview
+
 ## Troubleshooting
 
 - `Looks like your iOS environment is not properly set`: You can ignore this during template initialization and build the Android app as normal. This template is only compatible with Android.
