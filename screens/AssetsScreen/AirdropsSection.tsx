@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import Colors from '../../styles/Colours';
+import Colors from '../../styles/Colors';
 import useAssets from '../../store';
 import formatCurrency from '../../util/CurrencyUtils';
 
@@ -17,7 +17,7 @@ const AirdropsSection = () => {
         <View style={styles.assetsSection}>
           <TouchableOpacity style={styles.title}>
             <Text style={styles.titleText}>AIRDROPS</Text>
-            <Icon name="chevron-right" size={20} color={Colors.titleText} />
+            <Icon name="chevron-right" size={20} color={Colors.lightGrey} />
           </TouchableOpacity>
           <View style={styles.block}>
             {airdrops.map(item => (
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'Bebas Neue',
-    color: Colors.titleText,
+    color: Colors.lightGrey,
     opacity: 0.8,
     fontSize: 20,
   },

@@ -1,5 +1,7 @@
 import {create} from 'zustand';
-import {IAccount, IAsset, IWalletData, OpenPosition} from './interfaces';
+import {IAccount, IWalletData} from './interfaces';
+import { Asset } from '../types/asset';
+import { Position } from '../types/position';
 
 import {
   connectZetaMarkets,
@@ -11,7 +13,7 @@ import {
 } from './services';
 import {fetchAssets} from './HeliusApi';
 import {Connection} from '@solana/web3.js';
-import {Airdrop} from './Airdrop';
+import {Airdrop} from '../types/airdrop';
 
 export const APP_IDENTITY = {
   name: 'Dip',
@@ -22,14 +24,16 @@ export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
 
 interface IStore {
   wallet: IWalletData | null;
+  readOnlyWallets: string[];
   activeAccount: IAccount | null;
   totalBalance: number;
-  assets: IAsset[];
-  positions: OpenPosition[];
+  assets: Asset[];
+  positions: Position[];
   airdrops: Airdrop[];
   connection: Connection;
   isZetaConnected: '' | 'pending' | 'success' | 'failure';
   connectWallet: () => void;
+  addWallets: (wallets: string[]) => void;
   setActiveAccount: (account: IAccount) => void;
   setIsZetaConnected: (status: '' | 'pending' | 'success' | 'failure') => void;
   getAssets: () => void;
@@ -40,6 +44,7 @@ interface IStore {
 
 const useAssets = create<IStore>((set, get) => ({
   wallet: null,
+  readOnlyWallets: [],
   activeAccount: null,
   totalBalance: 0,
   assets: [],
@@ -56,6 +61,10 @@ const useAssets = create<IStore>((set, get) => ({
       activeAccount: wallet.accounts[0],
     }));
   },
+  addWallets: wallets => {
+    set(state => ({...state, readOnlyWallets: wallets}));
+  },
+
   setActiveAccount: account => {
     set(state => ({...state, activeAccount: account}));
   },

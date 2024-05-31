@@ -2,52 +2,49 @@ import {create} from 'zustand';
 import {PublicKey} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
 import {
+  Account,
   Account as AuthorizedAccount,
   AuthorizationResult,
   AuthorizeAPI,
   ReauthorizeAPI,
   DeauthorizeAPI,
 } from '@solana-mobile/mobile-wallet-adapter-protocol';
-import {Account, Authorization, IAccount} from './interfaces';
+import {Authorization, IAccount} from './interfaces';
 import {APP_IDENTITY} from './services';
 
-const getAccountFromAuthorizedAccount = (
-  account: AuthorizedAccount,
-): Account => ({
+const mapAuthorizedAccount = (account: AuthorizedAccount): Account => ({
   ...account,
   publicKey: new PublicKey(toUint8Array(account.address)),
 });
 
-const getAuthorizationFromAuthorizationResult = (
+const mapAuthorizationResult = (
   authorizationResult: AuthorizationResult,
-  previouslySelectedAccount?: Account | null,
+  previouslySelectedAccount?: IAccount | null,
 ): Authorization => {
-  let activeAccount: Account | null = null;
+  let activeAccount: IAccount | null = null;
+  const accounts = authorizationResult.accounts;
   if (
     !previouslySelectedAccount ||
-    !authorizationResult.accounts.some(
-      ({address}) => address === previouslySelectedAccount.address,
-    )
+    !accounts.some(({address}) => address === previouslySelectedAccount.address)
   ) {
-    const firstAccount = authorizationResult.accounts[0];
-    activeAccount = getAccountFromAuthorizedAccount(firstAccount);
+    activeAccount = mapAuthorizedAccount(accounts[0]);
   } else {
     activeAccount = previouslySelectedAccount;
   }
   return {
-    accounts: authorizationResult.accounts.map(getAccountFromAuthorizedAccount),
+    accounts: accounts.map(mapAuthorizedAccount),
     authToken: authorizationResult.auth_token,
     activeAccount,
   };
 };
 export interface AuthorizationState extends Authorization {
   accounts: [];
-  authToken: string;
+  authToken: string | null;
   activeAccount: IAccount | null;
 
   authorizeSession: (
     wallet: AuthorizeAPI & ReauthorizeAPI,
-  ) => Promise<Account | null>;
+  ) => Promise<IAccount | null>;
   deauthorizeSession: (wallet: DeauthorizeAPI) => void;
   onChangeAccount: (nextSelectedAccount: IAccount) => void;
 }
@@ -61,7 +58,7 @@ export const useAuthorizationStore = create<AuthorizationState>((set, get) => ({
     const authorizationResult = await (authToken
       ? wallet.reauthorize({auth_token: authToken, identity: APP_IDENTITY})
       : wallet.authorize({identity: APP_IDENTITY}));
-    const nextAuthorization = getAuthorizationFromAuthorizationResult(
+    const nextAuthorization = mapAuthorizationResult(
       authorizationResult,
       activeAccount,
     );
@@ -74,7 +71,7 @@ export const useAuthorizationStore = create<AuthorizationState>((set, get) => ({
       return;
     }
     await wallet.deauthorize({auth_token: authToken});
-    set({accounts: [], authToken: '', activeAccount: null});
+    set({accounts: [], authToken: undefined, activeAccount: null});
   },
 
   onChangeAccount: nextSelectedAccount => {

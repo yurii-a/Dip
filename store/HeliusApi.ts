@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {IAsset} from './interfaces';
+import { Asset } from '../types/asset';
 import {RPC_ENDPOINT} from './services';
 import {LAMPORTS_PER_SOL} from '@solana/web3.js';
-import {Token} from '../types/token';
+import {Token} from '../types/helius_token';
 
-function mapSolanaBalance(nativeBalance: any, address: string): IAsset {
+function mapSolanaBalance(nativeBalance: any, address: string): Asset {
   return {
     id: '1',
     title: 'SOL',
@@ -51,7 +51,7 @@ function mapResponse(item: Token) {
 
 export async function fetchAssets(
   address: string,
-): Promise<{assets: IAsset[]; solana: IAsset; totalBalance: number}> {
+): Promise<{assets: Asset[]; solana: Asset; totalBalance: number}> {
   console.log('Asset fetch started');
   const body = createPostBody(address);
   const response = await axios.post(RPC_ENDPOINT, body);
@@ -62,7 +62,7 @@ export async function fetchAssets(
   const nativeBalance = response.data.result.nativeBalance;
   const solBalance = mapSolanaBalance(nativeBalance, address);
 
-  const totalBalance = assets.reduce((accumulator: number, item: IAsset) => {
+  const totalBalance = assets.reduce((accumulator: number, item: Asset) => {
     return accumulator + item.totalPrice;
   }, 0);
 

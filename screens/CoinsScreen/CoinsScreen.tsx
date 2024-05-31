@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
-import Colors from '../../styles/Colours';
+import Colors from '../../styles/Colors';
 
 import useAssets from '../../store';
 import {FlatList} from 'react-native-gesture-handler';

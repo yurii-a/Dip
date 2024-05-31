@@ -1,9 +1,10 @@
 import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from '../../styles/Colours';
+import Colors from '../../styles/Colors';
 import useAssets from '../../store';
 import formatCurrency from '../../util/CurrencyUtils';
+import typography from '../../styles/Typography';
 
 const data: {
   icon: NodeRequire;
@@ -45,8 +46,8 @@ const TotalSection = () => {
   return (
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
-        <Text style={styles.titleText}>TOTAL WEALTH</Text>
-        <Icon name="chevron-right" size={20} color={Colors.titleText} />
+        <Text style={typography.title}>TOTAL WEALTH</Text>
+        <Icon name="chevron-right" size={20} color={Colors.lightGrey} />
       </TouchableOpacity>
 
       <View style={styles.block}>
@@ -57,7 +58,9 @@ const TotalSection = () => {
               source={item.icon}
               style={styles.image}
             />
-            <Text style={styles.label}>{item.title}</Text>
+            <Text style={[typography.label, {color: Colors.white}]}>
+              {item.title}
+            </Text>
             <View style={styles.prices}>
               <Text style={styles.total}>
                 {formatCurrency(item.total, true)}
@@ -110,12 +113,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 24,
-  },
-  titleText: {
-    fontFamily: 'Bebas Neue',
-    color: Colors.titleText,
-    opacity: 0.8,
-    fontSize: 20,
   },
   block: {
     backgroundColor: 'rgba(255, 255, 255, .2)',

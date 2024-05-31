@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   View,
 } from 'react-native';
-import Colors from '../../styles/Colours';
+import Colors from '../../styles/Colors';
 import AssetsHeader from './AssetsHeader';
 import TotalSection from './TotalSection';
 import AirdropsSection from './AirdropsSection';

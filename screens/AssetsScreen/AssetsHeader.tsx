@@ -3,7 +3,7 @@ import {TouchableOpacity, StyleSheet, Text, View, Animated} from 'react-native';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from '../../styles/Colours';
+import Colors from '../../styles/Colors';
 import useAssets from '../../store';
 import {useNavigation} from '@react-navigation/native';
 import {alignType, flexType} from './AssetsScreen';

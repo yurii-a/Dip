@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {LAMPORTS_PER_SOL, PublicKey, Transaction} from '@solana/web3.js';
 import {toUint8Array} from 'js-base64';
-import axios from 'axios';
 import {
   CrossClient,
   Exchange,
@@ -15,7 +14,8 @@ import {
   transact,
   Web3MobileWallet,
 } from '@solana-mobile/mobile-wallet-adapter-protocol-web3js';
-import {Dex, IAccount, IAsset, HeliusAsset, OpenPosition} from './interfaces';
+import {IAccount} from './interfaces';
+import Dex, { Position } from '../types/position';
 import {useAuthorizationStore} from './useAuthorizationStore';
 import useAssets from './index';
 export const APP_IDENTITY = {
@@ -25,7 +25,7 @@ export const APP_IDENTITY = {
 };
 export const RPC_ENDPOINT = 'https://rpc-proxy.solami.workers.dev/';
 const {authorizeSession} = useAuthorizationStore.getState();
-const {connection, activeAccount} = useAssets.getState();
+const {connection} = useAssets.getState();
 //________________________________FUNCTIONS________________________________________________________________
 export async function getWallet() { //Here we can connect solana wallets that we have at our phone
   const result = await transact(async (wallet: Web3MobileWallet) => { //function of connectin wallet
@@ -98,7 +98,7 @@ export async function connectZetaMarkets(account: IAccount) {
   }
 }
 
-const mapZetaPosition = (position: types.Position, accountState: types.CrossMarginAccountState, markPrice: number): OpenPosition => {
+const mapZetaPosition = (position: types.Position, accountState: types.CrossMarginAccountState, markPrice: number): Position => {
   const { asset, size, costOfTrades } = position;
   const exchange = Dex.ZETA;
   const entryPrice = Math.abs(costOfTrades / size);
@@ -133,43 +133,3 @@ export async function getPositions(account: IAccount) {
   return markPositions;
 }
 
-export async function getKaminoAirdrop(wallet: string) {
-  const url = `https://api.hubbleprotocol.io/v2/airdrop/users/${wallet}/allocations?source=Season1`;
-  try {
-    const response = await axios.get(url);
-    const total = response.data.reduce((total, item) => {
-      const quantity = parseFloat(item.quantity);
-      if (!isNaN(quantity)) {
-          return total + quantity;
-      } else {
-          return total;
-      }
-    }, 0);
-    return total;
-  } catch (error) {
-    console.error('Error fetching airdrop allocations:', error);
-    throw error;
-  }
-}
-
-export async function getParclAirdrop(wallet: string) {
-  const url = `https://app.parcl.co/api/allocation/${wallet}`;
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user points balance:', error);
-    throw error;
-  }
-}
-
-export async function getDriftAirdrop(wallet: string) {
-  const url = `https://app.drift.trade/api/points-drop?authority=${wallet}&bust`;
-  try {
-    const response = await axios.get(url);
-    return response.data.data.latestDrop.authorityScore;
-  } catch (error) {
-    console.error('Error fetching user points balance:', error);
-    throw error;
-  }
-}

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import Colors from '../../styles/Colours';
+import Colors from '../../styles/Colors';
 import useAssets from '../../store';
 import formatCurrency from '../../util/CurrencyUtils';
 
@@ -49,7 +49,7 @@ const PositionsSection = () => {
     <View style={styles.assetsSection}>
       <TouchableOpacity style={styles.title}>
         <Text style={styles.titleText}>OPEN POSITIONS</Text>
-        <Icon name="chevron-right" size={20} color={Colors.titleText} />
+        <Icon name="chevron-right" size={20} color={Colors.lightGrey} />
       </TouchableOpacity>
       <View style={styles.block}>
         {isZetaConnected === 'pending' && (
@@ -85,7 +85,7 @@ const PositionsSection = () => {
             </View>
             <View style={styles.open}>
               <Text style={styles.total}>{formatCurrency(item.pnl, true)}</Text>
-              <Icon name="chevron-right" size={20} color={Colors.titleText} />
+              <Icon name="chevron-right" size={20} color={Colors.lightGrey} />
             </View>
           </TouchableOpacity>
         ))}
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'Bebas Neue',
-    color: Colors.titleText,
+    color: Colors.lightGrey,
     opacity: 0.8,
     fontSize: 20,
   },

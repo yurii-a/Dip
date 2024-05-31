@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, TextInput, View, Image} from 'react-native';
-import Colors from '../styles/Colours';
+import {StyleSheet, Text, TextInput, View, Image, Platform} from 'react-native';
+import Colors from '../styles/Colors';
 import useAssets from '../store';
 import Button from 'react-native-ui-lib/src/components/button';
 export default function MainScreen({navigation}: {navigation: any}) {
@@ -16,7 +16,7 @@ export default function MainScreen({navigation}: {navigation: any}) {
     <>
       <View style={styles.mainContainer}>
         <View style={styles.logo}>
-          <Text style={styles.title}>Get started with DIP</Text>
+          <Text style={styles.title}>Welcome to Dip</Text>
           <Image
             resizeMode={'contain'}
             style={styles.illustration}
@@ -26,24 +26,24 @@ export default function MainScreen({navigation}: {navigation: any}) {
         <View>
           <Text style={styles.inputLabel}>Enter your wallet addresses</Text>
           <TextInput multiline style={styles.input} numberOfLines={3}>
-            <Text>
-              FvgywbgW4L9n6iPqi5cxCBJCu3WJB9MW21znyBnWncMt{'\n'}
-              toly.sol
-            </Text>
+            <Text>86xCnPeV69n6t3DnyGvkKobf9FdN2H9oiVDdaMpo2MMY</Text>
           </TextInput>
           <Button
             label="Add"
             backgroundColor={Colors.purpleDark}
             color={Colors.white}
           />
-
-          <Text style={styles.divider}>– or –</Text>
-          <Button
-            label="Connect wallet"
-            onPress={connectWallet}
-            backgroundColor={Colors.purpleDark}
-            color={Colors.white}
-          />
+          {Platform.OS === 'android' && (
+            <View style={{marginBottom: 24}}>
+              <Text style={styles.divider}>– or –</Text>
+              <Button
+                label="Connect wallet"
+                onPress={connectWallet}
+                backgroundColor={Colors.purpleDark}
+                color={Colors.white}
+              />
+            </View>
+          )}
         </View>
       </View>
     </>
