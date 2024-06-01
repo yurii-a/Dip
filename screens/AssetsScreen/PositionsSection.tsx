@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Colors from '../../styles/Colours';
 import useAssets from '../../store';
 import formatCurrency from '../../util/CurrencyUtils';
+import getImage from '../../util/TokenUtils';
 
 const PositionsSection = () => {
   const {
@@ -37,13 +38,6 @@ const PositionsSection = () => {
       connectZetaMarkets(activeAccount);
     }
   }
-  function getImage(name: string) {
-    return name === 'SOL'
-      ? require('../../assets/img/sol.png')
-      : name === 'JUP'
-      ? require('../../assets/img/jup.png')
-      : require('../../assets/img/eth.png');
-  }
 
   return (
     <View style={styles.assetsSection}>
@@ -69,7 +63,7 @@ const PositionsSection = () => {
           <TouchableOpacity key={item.asset} style={styles.blockItem}>
             <Image
               resizeMode="contain"
-              source={getImage(item.asset.toUpperCase())}
+              source={getImage(item.asset)}
               style={styles.image}
             />
             <View>
